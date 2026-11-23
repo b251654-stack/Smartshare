@@ -473,6 +473,16 @@ button { cursor: pointer; }
 .billing-card ul { min-height: 92px; padding-left: 18px; color: #555469; line-height: 2; }
 .billing-card .hero-button { width: 100%; margin-top: 10px; justify-content: center; }
 .billing-note { text-align: center; color: #858497; font-size: 12px; margin-top: 18px; }
+.public-share-page { min-height: 100vh; display: grid; place-items: center; background: #f8f8fc; }
+.public-share-card { width: min(560px, calc(100% - 32px)); padding: 32px; border-radius: 20px; background: #fff; box-shadow: 0 20px 60px #4c3e7414; }
+.public-share-card h1 { margin: 8px 0; }
+.team-section, .admin-section { max-width: 860px; margin: 20px auto 60px; }
+.team-empty { display: flex; align-items: center; gap: 12px; padding: 18px; background: #fff; border: 1px solid #ebe8f4; border-radius: 14px; }
+.team-empty small, .team-empty strong { display: block; }
+.admin-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.admin-grid article { padding: 24px; background: #fff; border: 1px solid #ebe8f4; border-radius: 14px; }
+.admin-grid small, .admin-grid strong { display: block; }
+.admin-grid strong { margin-top: 8px; font-size: 28px; }
 .project-record-card { padding: 0; overflow: hidden; }
 .project-card-open { display: block; width: 100%; padding: 12px; border: 0; background: transparent; text-align: left; }
 .project-card-actions { display: flex; justify-content: space-between; padding: 0 12px 12px; }

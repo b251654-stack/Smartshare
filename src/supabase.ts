@@ -56,7 +56,12 @@ type Database = {
       };
     };
     Views: Record<string, never>;
-    Functions: Record<string, never>;
+    Functions: {
+      get_public_project: {
+        Args: { share_token: string };
+        Returns: Array<{ id: string; name: string; design: Json }>;
+      };
+    };
     Enums: Record<string, never>;
     CompositeTypes: Record<string, never>;
   };
@@ -164,7 +169,20 @@ export async function createPublicProjectLink(
     .single();
 
   if (error) throw error;
-  return `${window.location.origin}/share/${data.token}`;
+  return `${window.location.origin}${window.location.pathname.includes('/Smartshare/') ? '/Smartshare' : ''}/share/${data.token}`;
+}
+
+export async function getPublicProject(
+  token: string
+): Promise<{ id: string; name: string; design: unknown } | null> {
+  if (!supabase) return null;
+
+  const { data, error } = await supabase.rpc('get_public_project', { share_token: token });
+  if (error) throw error;
+  if (!data || data.length === 0) return null;
+
+  const project = data[0] as { id: string; name: string; design: unknown };
+  return project;
 }
 
 export async function trackProductEvent(

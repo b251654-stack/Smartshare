@@ -3,7 +3,7 @@ import "./App.css";
 import Editor from './Editor';
 import { createProjectId, deleteProject, readProjects, saveProject, type ProjectRecord } from './projects';
 import AuthDialog from './AuthDialog';
-import { createPhonePeCheckout, createPublicProjectLink, listCloudProjects, removeCloudProject, saveCloudProject, supabase, trackProductEvent, type AuthUser } from './supabase';
+import { createPhonePeCheckout, createPublicProjectLink, getPublicProject, listCloudProjects, removeCloudProject, saveCloudProject, supabase, trackProductEvent, type AuthUser } from './supabase';
 
 const categories = [
   "All",
@@ -31,6 +31,8 @@ const menu = [
   ["▤", "Projects"],
   ["◈", "Brand Kit"],
   ["▧", "Photo Editor"],
+  ["👥", "Team"],
+  ["◉", "Admin"],
 ];
 
 function App() {
@@ -46,7 +48,24 @@ function App() {
   const [authReady, setAuthReady] = useState(!supabase);
   const [cloudSyncReady, setCloudSyncReady] = useState(!supabase);
   const [shareBusyId, setShareBusyId] = useState<string | null>(null);
+  const [sharedProject, setSharedProject] = useState<{ id: string; name: string; design: unknown } | null>(null);
   const userId = user?.id;
+
+  useEffect(() => {
+    const parts = window.location.pathname.split('/').filter(Boolean);
+    const shareIndex = parts.indexOf('share');
+    if (shareIndex === -1) return;
+
+    const token = parts[shareIndex + 1];
+    if (!token) return;
+
+    void getPublicProject(token)
+      .then(project => setSharedProject(project))
+      .catch(error => {
+        console.error('Could not load shared project.', error);
+        setCloudError('This share link is invalid or has expired.');
+      });
+  }, []);
 
   useEffect(() => {
     if (!supabase) return;
@@ -290,6 +309,19 @@ function App() {
     return <Editor projectId={openProjectId} userId={user?.id} onBack={closeEditor} />;
   }
 
+  if (sharedProject) {
+    return (
+      <main className="public-share-page">
+        <section className="public-share-card">
+          <div className="brand"><div className="brand-icon">S</div><span>smart<span>share</span></span></div>
+          <div className="eyebrow">SHARED DESIGN</div>
+          <h1>{sharedProject.name}</h1>
+          <p>This SmartShare design was shared with you.</p>
+        </section>
+      </main>
+    );
+  }
+
   return (
     <div className="app-shell">
       <aside className="sidebar">
@@ -375,7 +407,27 @@ function App() {
             </div>
           )}
           {cloudError && <div className="cloud-error-notice" role="alert">{cloudError}</div>}
-          {active === 'Projects' ? (
+          {active === 'Team' ? (
+            <section className="team-section">
+              <div className="section-heading">
+                <div><div className="eyebrow">TEAM WORKSPACE</div><h1>Members</h1><p>Invite and manage people in your workspace.</p></div>
+                <button className="hero-button" onClick={() => setCloudError('Team invitations will activate when workspace billing is enabled.')}>Invite member</button>
+              </div>
+              <div className="team-empty">
+                <div className="avatar">{user?.email?.charAt(0).toUpperCase() ?? 'U'}</div>
+                <div><strong>{user?.email ?? 'Guest'}</strong><small>Owner</small></div>
+              </div>
+            </section>
+          ) : active === 'Admin' ? (
+            <section className="admin-section">
+              <div className="section-heading"><div><div className="eyebrow">CONTROL CENTER</div><h1>Admin dashboard</h1><p>Workspace usage and account overview.</p></div></div>
+              <div className="admin-grid">
+                <article><small>Projects</small><strong>{projects.length}</strong></article>
+                <article><small>Plan</small><strong>Free</strong></article>
+                <article><small>Account</small><strong>{user ? 'Active' : 'Guest'}</strong></article>
+              </div>
+            </section>
+          ) : active === 'Projects' ? (
             <section className="all-projects-section">
               <div className="section-heading">
                 <div>
