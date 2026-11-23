@@ -38,7 +38,10 @@ const menu = [
 function App() {
   const [projects, setProjects] = useState<ProjectRecord<unknown>[]>(() => readProjects());
   const [openProjectId, setOpenProjectId] = useState<string | null>(null);
-  const [active, setActive] = useState("Home");
+  const [active, setActive] = useState(() => {
+    const hash = window.location.hash.replace('#/', '').replace('#', '');
+    return hash || 'Home';
+  });
   const [category, setCategory] = useState("All");
   const [search, setSearch] = useState("");
   const [user, setUser] = useState<AuthUser | null>(null);
@@ -71,6 +74,19 @@ function App() {
     const mainArea = document.querySelector('.main-area');
     if (mainArea) mainArea.scrollTo({ top: 0, behavior: 'smooth' });
   }, [active]);
+
+  useEffect(() => {
+    const onHashChange = () => {
+      setActive(window.location.hash.replace('#/', '').replace('#', '') || 'Home');
+    };
+    window.addEventListener('hashchange', onHashChange);
+    return () => window.removeEventListener('hashchange', onHashChange);
+  }, []);
+
+  const navigate = (name: string) => {
+    setActive(name);
+    window.location.hash = `/${name}`;
+  };
 
   useEffect(() => {
     if (!supabase) return;
@@ -344,8 +360,9 @@ function App() {
           {menu.map(([icon, name]) => (
             <button
               key={name}
+              type="button"
               className={`nav-item ${active === name ? "active" : ""}`}
-              onClick={() => setActive(name)}
+              onClick={() => navigate(name)}
             >
               <span className="nav-icon">{icon}</span>
               {name}
