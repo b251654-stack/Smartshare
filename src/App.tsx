@@ -427,6 +427,53 @@ function App() {
                 <article><small>Account</small><strong>{user ? 'Active' : 'Guest'}</strong></article>
               </div>
             </section>
+          ) : active === 'Templates' ? (
+            <section className="template-library-section">
+              <div className="section-heading"><div><div className="eyebrow">TEMPLATE LIBRARY</div><h1>Start with a template</h1><p>Choose a ready-made canvas for your next design.</p></div></div>
+              <div className="category-tabs">
+                {categories.map(item => (
+                  <button key={item} className={category === item ? 'category active-category' : 'category'} onClick={() => setCategory(item)}>{item}</button>
+                ))}
+              </div>
+              <div className="template-grid">
+                {filteredTemplates.map(item => (
+                  <button className="template-card" key={item.title} onClick={() => createProject(item.title, item.title)}>
+                    <div className={`template-preview ${item.style}`}>
+                      <div className="preview-top">SMARTSHARE <span>✦</span></div>
+                      <div className="preview-symbol">{item.icon}</div>
+                      <div className="preview-title">{item.title}</div>
+                    </div>
+                    <div className="template-info"><div><strong>{item.title}</strong><small>{item.size}</small></div><span>↗</span></div>
+                  </button>
+                ))}
+              </div>
+            </section>
+          ) : active === 'AI Studio' || active === 'Video Studio' || active === 'Brand Kit' || active === 'Photo Editor' ? (
+            <section className="studio-section">
+              <div className="section-heading">
+                <div><div className="eyebrow">SMARTSHARE STUDIO</div><h1>{active}</h1>
+                  <p>{active === 'AI Studio' ? 'Generate and customize a new creative direction.'
+                    : active === 'Video Studio' ? 'Create a canvas sized for short-form and YouTube videos.'
+                    : active === 'Brand Kit' ? 'Keep your brand colors and identity ready.'
+                    : 'Upload an image and start editing it in the design workspace.'}</p>
+                </div>
+              </div>
+              <div className="studio-grid">
+                <button onClick={() => createProject(`${active} design`)}>
+                  <span>＋</span><strong>Create {active} design</strong><small>Open the editor and start creating</small>
+                </button>
+                {active === 'Brand Kit' && (
+                  <button onClick={() => createProject('Brand Kit')}>
+                    <span>✦</span><strong>Set brand colors</strong><small>Create a reusable brand canvas</small>
+                  </button>
+                )}
+                {active === 'AI Studio' && (
+                  <button onClick={() => createProject('AI Campaign', 'Your AI-powered campaign')}>
+                    <span>✧</span><strong>AI campaign starter</strong><small>Generate a campaign layout</small>
+                  </button>
+                )}
+              </div>
+            </section>
           ) : active === 'Projects' ? (
             <section className="all-projects-section">
               <div className="section-heading">
