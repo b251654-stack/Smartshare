@@ -18,7 +18,7 @@ body {
 button, input { font: inherit; }
 button { cursor: pointer; }
 
-.app-shell { min-height: 100vh; display: flex; }
+.app-shell { height: 100vh; min-height: 100vh; display: flex; overflow: hidden; }
 
 /* SIDEBAR */
 .sidebar {
@@ -175,7 +175,7 @@ button { cursor: pointer; }
 .profile > div:nth-child(2) strong { max-width: 125px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* MAIN AREA */
-.main-area { flex: 1; min-width: 0; }
+.main-area { flex: 1; min-width: 0; height: 100vh; overflow-y: auto; overflow-x: hidden; }
 
 .topbar {
   height: 77px;

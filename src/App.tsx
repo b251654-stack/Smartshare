@@ -68,6 +68,11 @@ function App() {
   }, []);
 
   useEffect(() => {
+    const mainArea = document.querySelector('.main-area');
+    if (mainArea) mainArea.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [active]);
+
+  useEffect(() => {
     if (!supabase) return;
 
     let active = true;
