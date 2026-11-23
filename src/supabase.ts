@@ -62,8 +62,10 @@ type Database = {
   };
 };
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL?.trim();
-const supabasePublishableKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY?.trim();
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL?.trim()
+  || 'https://xblmhlcigaodtjukmlti.supabase.co';
+const supabasePublishableKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY?.trim()
+  || 'sb_publishable_VRMjerXl1kA8wFgjDpFShw_BvEuwFsH';
 
 export const supabase = supabaseUrl && supabasePublishableKey
   ? createClient<Database>(supabaseUrl, supabasePublishableKey)

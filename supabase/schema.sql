@@ -75,7 +75,7 @@ create table if not exists public.workspace_members (
 
 create table if not exists public.subscriptions (
   user_id uuid primary key references auth.users (id) on delete cascade,
-  provider text not null default 'none' check (provider in ('none', 'stripe', 'razorpay')),
+  provider text not null default 'none' check (provider in ('none', 'stripe', 'razorpay', 'phonepe')),
   provider_customer_id text,
   provider_subscription_id text,
   plan text not null default 'free' check (plan in ('free', 'pro', 'team')),
