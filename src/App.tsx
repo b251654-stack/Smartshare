@@ -429,7 +429,7 @@ function App() {
               <div className="billing-grid">
                 <article className="billing-card">
                   <span className="billing-badge">MONTHLY</span>
-                  <div className="billing-price"><strong>₹299</strong><small>/month</small></div>
+                  <div className="billing-price"><strong>₹199</strong><small>/month</small></div>
                   <p>Flexible monthly access for creators.</p>
                   <ul>
                     <li>Unlimited saved projects</li>
@@ -437,20 +437,20 @@ function App() {
                     <li>Cloud image storage</li>
                   </ul>
                   <button className="hero-button" onClick={() => void startPaidPlan('monthly')}>
-                    Pay ₹299 with PhonePe
+                    Pay ₹199 with PhonePe
                   </button>
                 </article>
                 <article className="billing-card billing-card-featured">
                   <span className="billing-badge">BEST VALUE · YEARLY</span>
-                  <div className="billing-price"><strong>₹699</strong><small>/year</small></div>
+                  <div className="billing-price"><strong>₹1499</strong><small>/year</small></div>
                   <p>SmartShare Pro for the whole year.</p>
                   <ul>
                     <li>Everything in Monthly</li>
                     <li>Priority exports</li>
-                    <li>Save ₹2,889 per year</li>
+                    <li>Save ₹889 per year</li>
                   </ul>
                   <button className="hero-button" onClick={() => void startPaidPlan('yearly')}>
-                    Pay ₹699 with PhonePe
+                    Pay ₹1499 with PhonePe
                   </button>
                 </article>
               </div>

@@ -54,8 +54,8 @@ Deno.serve(async request => {
 
   const { plan } = await request.json();
   const plans: Record<string, { amount: number; name: 'pro_monthly' | 'pro_yearly' }> = {
-    monthly: { amount: 29900, name: 'pro_monthly' },
-    yearly: { amount: 69900, name: 'pro_yearly' },
+    monthly: { amount: 19900, name: 'pro_monthly' },
+    yearly: { amount: 149900, name: 'pro_yearly' },
   };
   const selected = plans[String(plan)];
   if (!selected) {
