@@ -1,7 +1,7 @@
 const CACHE_NAME = 'smartshare-v1';
 
 self.addEventListener('install', event => {
-  event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(['/'])));
+  event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(['/Smartshare/', '/Smartshare/index.html'])));
   self.skipWaiting();
 });
 
@@ -25,6 +25,6 @@ self.addEventListener('fetch', event => {
         }
         return response;
       })
-      .catch(() => caches.match(event.request).then(cached => cached || caches.match('/')))
+      .catch(() => caches.match(event.request).then(cached => cached || caches.match('/Smartshare/')))
   );
 });
