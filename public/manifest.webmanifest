@@ -1,0 +1,17 @@
+{
+  "name": "SmartShare Creative Workspace",
+  "short_name": "SmartShare",
+  "description": "Create, share, and collaborate on designs.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8f8fc",
+  "theme_color": "#7555ed",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
