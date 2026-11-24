@@ -27,28 +27,40 @@ button { cursor: pointer; }
 .sidebar {
   width: 248px;
   min-width: 248px;
+  flex: 0 0 248px;
   background: #fff;
   border-right: 1px solid #ededf3;
   padding: 27px 17px 18px;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  position: sticky;
-  top: 0;
+  min-height: 0;
+  position: relative;
   height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.sidebar-scroll-area {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
   overscroll-behavior: contain;
 }
 
-.sidebar::-webkit-scrollbar { width: 6px; }
-.sidebar::-webkit-scrollbar-thumb { background: #ded9ed; border-radius: 999px; }
+.sidebar-scroll-area::-webkit-scrollbar { width: 6px; }
+.sidebar-scroll-area::-webkit-scrollbar-thumb { background: #ded9ed; border-radius: 999px; }
 
 .brand,
 .create-button,
 .menu-label,
 .nav-menu,
 .sidebar-bottom { flex-shrink: 0; }
+
+.sidebar-toggle { display: none; }
 
 .brand {
   display: flex;
@@ -888,7 +900,7 @@ button { cursor: pointer; }
 
 /* RESPONSIVE DESIGN */
 @media (max-width: 1100px) {
-  .sidebar { width: 210px; min-width: 210px; }
+  .sidebar { width: 210px; min-width: 210px; flex-basis: 210px; }
   .page-content { padding: 28px 25px; }
   .quick-grid { grid-template-columns: repeat(3, 1fr); }
   .hero-art { transform: scale(.8); transform-origin: center right; }
@@ -898,7 +910,33 @@ button { cursor: pointer; }
 }
 
 @media (max-width: 760px) {
-  .sidebar { width: 66px; min-width: 66px; padding: 20px 8px; }
+  .sidebar { width: 66px; min-width: 66px; flex-basis: 66px; padding: 12px 8px; }
+  .sidebar.sidebar-expanded {
+    position: fixed;
+    z-index: 100;
+    inset: 0 auto 0 0;
+    width: 248px;
+    min-width: 248px;
+    flex-basis: 248px;
+    height: 100vh;
+    height: 100dvh;
+    padding: 16px 14px;
+    box-shadow: 12px 0 32px #24243830;
+  }
+  .sidebar-toggle {
+    display: grid;
+    flex: 0 0 auto;
+    width: 40px;
+    height: 36px;
+    margin: 0 auto 12px;
+    place-items: center;
+    border: 0;
+    border-radius: 8px;
+    background: #f1edff;
+    color: #6847df;
+    font-size: 22px;
+  }
+  .sidebar-expanded .sidebar-toggle { margin-left: 0; }
   .brand { padding: 0; justify-content: center; margin-bottom: 25px; }
   .brand > span, .menu-label, .upgrade-card,
   .profile > div:not(.avatar), .profile-dots { display: none; }
@@ -907,6 +945,17 @@ button { cursor: pointer; }
   .nav-item { justify-content: center; padding: 12px 4px; font-size: 0; }
   .nav-icon { font-size: 19px; }
   .profile { justify-content: center; }
+  .sidebar-expanded .brand { justify-content: flex-start; }
+  .sidebar-expanded .brand > span,
+  .sidebar-expanded .menu-label,
+  .sidebar-expanded .upgrade-card,
+  .sidebar-expanded .profile > div:not(.avatar),
+  .sidebar-expanded .profile-dots { display: block; }
+  .sidebar-expanded .create-button { padding: 14px 12px; font-size: 14px; }
+  .sidebar-expanded .create-button span { font-size: 19px; margin-right: 8px; }
+  .sidebar-expanded .nav-item { justify-content: flex-start; padding: 12px 13px; font-size: 13px; }
+  .sidebar-expanded .nav-icon { font-size: 19px; }
+  .sidebar-expanded .profile { justify-content: flex-start; }
   .topbar { padding: 0 15px; }
   .breadcrumb { display: none; }
   .search-box { width: min(240px, 48vw); }

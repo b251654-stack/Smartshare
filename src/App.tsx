@@ -38,6 +38,7 @@ const menu = [
 function App() {
   const [projects, setProjects] = useState<ProjectRecord<unknown>[]>(() => readProjects());
   const [openProjectId, setOpenProjectId] = useState<string | null>(null);
+  const [sidebarExpanded, setSidebarExpanded] = useState(false);
   const [active, setActive] = useState(() => {
     const hash = window.location.hash.replace('#/', '').replace('#', '');
     return hash || 'Home';
@@ -355,50 +356,64 @@ function App() {
 
   return (
     <div className="app-shell">
-      <aside className="sidebar">
-        <div className="brand">
-          <div className="brand-icon">S</div>
-          <span>smart<span>share</span></span>
-        </div>
-
-        <button className="create-button" onClick={() => createProject()}>
-          <span>＋</span> Create a design
-        </button>
-
-        <div className="menu-label">WORKSPACE</div>
-        <nav className="nav-menu">
-          {menu.map(([icon, name]) => (
-            <button
-              key={name}
-              type="button"
-              className={`nav-item ${active === name ? "active" : ""}`}
-              onClick={() => navigate(name)}
-            >
-              <span className="nav-icon">{icon}</span>
-              {name}
-            </button>
-          ))}
-        </nav>
-
-        <div className="sidebar-bottom">
-          <div className="upgrade-card">
-            <div className="upgrade-star">✦</div>
-            <strong>Unlock your creativity</strong>
-            <p>Get premium templates and AI tools.</p>
-            <button onClick={() => setActive('Premium')}>Explore Premium ↗</button>
+      <aside className={`sidebar ${sidebarExpanded ? 'sidebar-expanded' : ''}`}>
+        <div className="sidebar-scroll-area">
+          <button
+            className="sidebar-toggle"
+            type="button"
+            aria-label={sidebarExpanded ? 'Collapse navigation' : 'Expand navigation'}
+            aria-expanded={sidebarExpanded}
+            onClick={() => setSidebarExpanded(expanded => !expanded)}
+          >
+            {sidebarExpanded ? '×' : '☰'}
+          </button>
+          <div className="brand">
+            <div className="brand-icon">S</div>
+            <span>smart<span>share</span></span>
           </div>
-          <div className="profile">
-            <div className="avatar">{user?.email?.charAt(0).toUpperCase() ?? 'U'}</div>
-            <div>
-              <strong>{user?.email ?? 'Guest workspace'}</strong>
-              <small>{user ? cloudStatus : 'Local save only'}</small>
+
+          <button className="create-button" onClick={() => createProject()}>
+            <span>＋</span> Create a design
+          </button>
+
+          <div className="menu-label">WORKSPACE</div>
+          <nav className="nav-menu">
+            {menu.map(([icon, name]) => (
+              <button
+                key={name}
+                type="button"
+                className={`nav-item ${active === name ? "active" : ""}`}
+                onClick={() => {
+                  navigate(name);
+                  if (window.innerWidth <= 760) setSidebarExpanded(false);
+                }}
+              >
+                <span className="nav-icon">{icon}</span>
+                {name}
+              </button>
+            ))}
+          </nav>
+
+          <div className="sidebar-bottom">
+            <div className="upgrade-card">
+              <div className="upgrade-star">✦</div>
+              <strong>Unlock your creativity</strong>
+              <p>Get premium templates and AI tools.</p>
+              <button onClick={() => navigate('Premium')}>Explore Premium ↗</button>
             </div>
-            <button className="profile-dots" onClick={user ? signOut : () => {
-              if (supabase) setAuthDialogOpen(true);
-              else setCloudError('To enable accounts, configure Supabase using the steps in README.md.');
-            }}>
-              {user ? 'Sign out' : 'Sign in'}
-            </button>
+            <div className="profile">
+              <div className="avatar">{user?.email?.charAt(0).toUpperCase() ?? 'U'}</div>
+              <div>
+                <strong>{user?.email ?? 'Guest workspace'}</strong>
+                <small>{user ? cloudStatus : 'Local save only'}</small>
+              </div>
+              <button className="profile-dots" onClick={user ? signOut : () => {
+                if (supabase) setAuthDialogOpen(true);
+                else setCloudError('To enable accounts, configure Supabase using the steps in README.md.');
+              }}>
+                {user ? 'Sign out' : 'Sign in'}
+              </button>
+            </div>
           </div>
         </div>
       </aside>
