@@ -326,10 +326,29 @@ export default function Editor({ projectId, userId, onBack, onUpgrade }: EditorP
     savedProject?.createdAt
   ]);
 
+  const saveCurrentProjectRef = useRef(saveCurrentProject);
+  saveCurrentProjectRef.current = saveCurrentProject;
+  const onBackRef = useRef(onBack);
+  onBackRef.current = onBack;
+
   useEffect(() => {
     const timeoutId = window.setTimeout(saveCurrentProject, 350);
     return () => window.clearTimeout(timeoutId);
   }, [saveCurrentProject]);
+
+  useEffect(() => {
+    const saveBeforeLeaving = () => saveCurrentProjectRef.current();
+    const closeAfterSaving = () => {
+      saveCurrentProjectRef.current();
+      onBackRef.current?.();
+    };
+    window.addEventListener('popstate', closeAfterSaving);
+    window.addEventListener('pagehide', saveBeforeLeaving);
+    return () => {
+      window.removeEventListener('popstate', closeAfterSaving);
+      window.removeEventListener('pagehide', saveBeforeLeaving);
+    };
+  }, []);
 
   const handleBack = () => {
     saveCurrentProject();
