@@ -259,15 +259,17 @@ function getProjectPreview(design: unknown): string | null {
     : null;
 }
 
+function getActivePageFromHash(): string {
+  const route = window.location.hash.replace(/^#\/?/, "");
+  return route ? decodeURIComponent(route) : "Home";
+}
+
 function App() {
   const [projects, setProjects] = useState<ProjectRecord<unknown>[]>(() => readProjects());
   const [openProjectId, setOpenProjectId] = useState<string | null>(null);
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<typeof templates[number] | null>(null);
-  const [active, setActive] = useState(() => {
-    const hash = window.location.hash.replace('#/', '').replace('#', '');
-    return hash || 'Home';
-  });
+  const [active, setActive] = useState(getActivePageFromHash);
   const [category, setCategory] = useState("All");
   const [search, setSearch] = useState("");
   const [user, setUser] = useState<AuthUser | null>(null);
@@ -303,7 +305,7 @@ function App() {
 
   useEffect(() => {
     const onHashChange = () => {
-      setActive(window.location.hash.replace('#/', '').replace('#', '') || 'Home');
+      setActive(getActivePageFromHash());
     };
     window.addEventListener('hashchange', onHashChange);
     return () => window.removeEventListener('hashchange', onHashChange);
