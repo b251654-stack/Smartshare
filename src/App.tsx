@@ -314,7 +314,10 @@ function getActivePageFromHash(): string {
 
 function App() {
   const [projects, setProjects] = useState<ProjectRecord<unknown>[]>(() => readProjects());
-  const [openProjectId, setOpenProjectId] = useState<string | null>(null);
+  const [openProjectId, setOpenProjectId] = useState<string | null>(() => {
+    const projectId = window.history.state?.smartshareEditorProjectId;
+    return typeof projectId === 'string' ? projectId : null;
+  });
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<typeof templates[number] | null>(null);
   const [active, setActive] = useState(getActivePageFromHash);
@@ -358,6 +361,20 @@ function App() {
     };
     window.addEventListener('hashchange', onHashChange);
     return () => window.removeEventListener('hashchange', onHashChange);
+  }, []);
+
+  useEffect(() => {
+    const syncEditorFromHistory = () => {
+      const projectId = window.history.state?.[editorHistoryKey];
+      setOpenProjectId(typeof projectId === 'string' ? projectId : null);
+    };
+
+    window.addEventListener('popstate', syncEditorFromHistory);
+    window.addEventListener('pageshow', syncEditorFromHistory);
+    return () => {
+      window.removeEventListener('popstate', syncEditorFromHistory);
+      window.removeEventListener('pageshow', syncEditorFromHistory);
+    };
   }, []);
 
   const navigate = (name: string) => {
