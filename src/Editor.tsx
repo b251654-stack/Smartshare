@@ -88,15 +88,32 @@ type SavedProject = {
 const categories = [
   'All', 'Instagram', 'YouTube', 'Wedding', 'Birthday',
   'Business', 'Presentation', 'Education', 'Logo',
-  'Posters', 'Facebook'
+  'Posters', 'Facebook', 'TikTok', 'LinkedIn', 'X',
+  'Pinterest', 'Snapchat', 'WhatsApp', 'Threads', 'Reddit'
 ];
 
 const templates = [
   { name: 'Instagram Post', category: 'Instagram', image: 'photo-1611162617474-5b21e879e113' },
   { name: 'Instagram Story', category: 'Instagram', image: 'photo-1611262588024-d12430b98920' },
   { name: 'Instagram Promotion', category: 'Instagram', image: 'photo-1611162616305-c69b3fa7fbe0' },
+  { name: 'Facebook Post', category: 'Facebook', image: 'photo-1521737711867-e3b97375f902' },
+  { name: 'Facebook Story', category: 'Facebook', image: 'photo-1511988617509-a57c8a288659' },
+  { name: 'TikTok Video Cover', category: 'TikTok', image: 'photo-1492619375914-88005aa9e8fb' },
+  { name: 'TikTok Story', category: 'TikTok', image: 'photo-1513364776144-60967b0f800f' },
   { name: 'YouTube Thumbnail', category: 'YouTube', image: 'photo-1611162616475-46b635cb6868' },
   { name: 'YouTube Banner', category: 'YouTube', image: 'photo-1611162618071-b39a2ec055fb' },
+  { name: 'YouTube Shorts Cover', category: 'YouTube', image: 'photo-1611162616475-46b635cb6868' },
+  { name: 'LinkedIn Post', category: 'LinkedIn', image: 'photo-1450101499163-c8848c66ca85' },
+  { name: 'LinkedIn Banner', category: 'LinkedIn', image: 'photo-1497366754035-f200968a6e72' },
+  { name: 'X Post', category: 'X', image: 'photo-1500534623283-312aade485b7' },
+  { name: 'X Header', category: 'X', image: 'photo-1553877522-43269d4ea984' },
+  { name: 'Pinterest Pin', category: 'Pinterest', image: 'photo-1483985988355-763728e1935b' },
+  { name: 'Pinterest Idea Pin', category: 'Pinterest', image: 'photo-1500530855697-b586d89ba3ee' },
+  { name: 'Snapchat Story', category: 'Snapchat', image: 'photo-1530103862676-de8c9debad1d' },
+  { name: 'WhatsApp Status', category: 'WhatsApp', image: 'photo-1519741497674-611481863552' },
+  { name: 'WhatsApp Catalog', category: 'WhatsApp', image: 'photo-1523275335684-37898b6baf30' },
+  { name: 'Threads Post', category: 'Threads', image: 'photo-1513364776144-60967b0f800f' },
+  { name: 'Reddit Post', category: 'Reddit', image: 'photo-1552664730-d307ca884978' },
   { name: 'Wedding Invitation', category: 'Wedding', image: 'photo-1519741497674-611481863552' },
   { name: 'Wedding Card', category: 'Wedding', image: 'photo-1511285560929-80b456fea0bc' },
   { name: 'Birthday Invitation', category: 'Birthday', image: 'photo-1530103862676-de8c9debad1d' },
