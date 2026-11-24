@@ -44,6 +44,12 @@ const examplesByType: Record<string, Array<{ name: string; image: string }>> = {
     { name: "Minimal", image: "photo-1490750967868-88aa4486c946" },
     { name: "Lifestyle", image: "photo-1500530855697-b586d89ba3ee" },
     { name: "Bold story", image: "photo-1530103862676-de8c9debad1d" },
+    { name: "Product focus", image: "photo-1523275335684-37898b6baf30" },
+    { name: "Street style", image: "photo-1483985988355-763728e1935b" },
+    { name: "Travel notes", image: "photo-1500534623283-312aade485b7" },
+    { name: "Creator life", image: "photo-1492619375914-88005aa9e8fb" },
+    { name: "Colorful moments", image: "photo-1513364776144-60967b0f800f" },
+    { name: "Daily inspiration", image: "photo-1511988617509-a57c8a288659" },
   ],
   Video: [
     { name: "Creator spotlight", image: "photo-1611162616475-46b635cb6868" },
@@ -60,6 +66,12 @@ const examplesByType: Record<string, Array<{ name: string; image: string }>> = {
     { name: "Creative studio", image: "photo-1497366811353-6870744d04b2" },
     { name: "Strategy deck", image: "photo-1552664730-d307ca884978" },
     { name: "Project overview", image: "photo-1507679799987-c73779587ccf" },
+    { name: "Team workshop", image: "photo-1521737711867-e3b97375f902" },
+    { name: "Product roadmap", image: "photo-1460925895917-afdab827c52f" },
+    { name: "Research report", image: "photo-1450101499163-c8848c66ca85" },
+    { name: "Creative portfolio", image: "photo-1455390582262-044cdead277a" },
+    { name: "Marketing plan", image: "photo-1556761175-b413da4baf72" },
+    { name: "Annual review", image: "photo-1553877522-43269d4ea984" },
   ],
   Logo: [
     { name: "Studio identity", image: "photo-1626785774573-4b799315345d" },
@@ -102,6 +114,38 @@ const examplesByType: Record<string, Array<{ name: string; image: string }>> = {
     { name: "New ideas", image: "photo-1509062522246-3755977927d7" },
   ],
 };
+
+const homeQuickLinks = [
+  { icon: "▦", title: "Templates", color: "blue", category: "All" },
+  { icon: "▤", title: "Presentation", color: "orange", category: "Presentation" },
+  { icon: "◎", title: "Social media", color: "pink", category: "Social Media" },
+  { icon: "▶", title: "Video", color: "purple", category: "Video" },
+  { icon: "✳", title: "Printables", color: "yellow", category: "Marketing" },
+  { icon: "▤", title: "Documents", color: "blue", category: "Business" },
+  { icon: "◇", title: "Whiteboard", color: "green", category: "Education" },
+  { icon: "▦", title: "Sheets", color: "green", category: "Business" },
+  { icon: "▧", title: "Website", color: "purple", category: "Marketing" },
+  { icon: "✎", title: "Education", color: "orange", category: "Education" },
+  { icon: "✦", title: "Events", color: "pink", category: "Event" },
+];
+
+const searchFormats = [
+  { title: "Instagram Post", type: "Social Media", size: "1080 × 1080", icon: "◎", keywords: "instagram social post feed square", templateTitle: "Instagram Post" },
+  { title: "Instagram Story", type: "Social Media", size: "1080 × 1920", icon: "▯", keywords: "instagram story vertical", templateTitle: "Instagram Story" },
+  { title: "Instagram Reel", type: "Social Media", size: "1080 × 1920", icon: "▶", keywords: "instagram reel video vertical", templateTitle: "Instagram Story" },
+  { title: "Instagram Carousel", type: "Social Media", size: "1080 × 1080", icon: "▧", keywords: "instagram carousel swipe post", templateTitle: "Instagram Post" },
+  { title: "Instagram Ad", type: "Social Media", size: "1080 × 1350", icon: "✦", keywords: "instagram ad promotion", templateTitle: "Instagram Post" },
+  { title: "Instagram Profile", type: "Social Media", size: "320 × 320", icon: "◉", keywords: "instagram profile picture avatar", templateTitle: "Instagram Post" },
+  { title: "Reel Cover", type: "Social Media", size: "1080 × 1920", icon: "▣", keywords: "instagram reel cover thumbnail", templateTitle: "Instagram Story" },
+  { title: "Instagram Highlight", type: "Social Media", size: "1080 × 1920", icon: "◌", keywords: "instagram highlight story cover", templateTitle: "Instagram Story" },
+  { title: "Presentation (16:9)", type: "Presentation", size: "1920 × 1080", icon: "▤", keywords: "presentation slides widescreen", templateTitle: "Business Presentation" },
+  { title: "Presentation (4:3)", type: "Presentation", size: "1024 × 768", icon: "▤", keywords: "presentation slides classic", templateTitle: "Business Presentation" },
+  { title: "Pitch deck", type: "Presentation", size: "16:9", icon: "↗", keywords: "presentation pitch deck startup", templateTitle: "Pitch Deck Cover" },
+  { title: "Presentation cover", type: "Presentation", size: "16:9", icon: "✦", keywords: "presentation cover title slide", templateTitle: "Business Presentation" },
+  { title: "YouTube Thumbnail", type: "Video", size: "1280 × 720", icon: "▶", keywords: "youtube video thumbnail", templateTitle: "YouTube Thumbnail" },
+  { title: "YouTube Banner", type: "Video", size: "2560 × 1440", icon: "▰", keywords: "youtube channel banner", templateTitle: "YouTube Channel Banner" },
+  { title: "Logo", type: "Logo", size: "500 × 500", icon: "✦", keywords: "logo brand identity", templateTitle: "Brand Logo" },
+];
 
 const menu = [
   ["⌂", "Home"],
@@ -162,6 +206,25 @@ function createTemplateDesign(
   };
 }
 
+function getProjectPreview(design: unknown): string | null {
+  if (typeof design !== "object" || design === null || !("items" in design) || !Array.isArray(design.items)) {
+    return null;
+  }
+
+  const image = design.items.find(item =>
+    typeof item === "object" &&
+    item !== null &&
+    "type" in item &&
+    item.type === "image" &&
+    "src" in item &&
+    typeof item.src === "string"
+  );
+
+  return image && typeof image === "object" && "src" in image && typeof image.src === "string"
+    ? image.src
+    : null;
+}
+
 function App() {
   const [projects, setProjects] = useState<ProjectRecord<unknown>[]>(() => readProjects());
   const [openProjectId, setOpenProjectId] = useState<string | null>(null);
@@ -214,6 +277,7 @@ function App() {
 
   const navigate = (name: string) => {
     if (name !== 'Templates') setSelectedTemplate(null);
+    setSearch('');
     setActive(name);
     window.location.hash = `/${name}`;
   };
@@ -492,6 +556,34 @@ function App() {
     const matchesSearch = item.title.toLowerCase().includes(search.toLowerCase());
     return matchesCategory && matchesSearch;
   });
+  const normalizedSearch = search.trim().toLowerCase();
+  const matchingSearchTemplates = normalizedSearch
+    ? templates.filter(item => item.title.toLowerCase().includes(normalizedSearch) || item.type.toLowerCase().includes(normalizedSearch))
+    : [];
+  const searchFormatsForQuery = normalizedSearch
+    ? searchFormats.filter(item => `${item.title} ${item.keywords}`.toLowerCase().includes(normalizedSearch))
+    : [];
+  const searchType = matchingSearchTemplates[0]?.type ?? searchFormatsForQuery[0]?.type;
+  const searchTemplate = matchingSearchTemplates[0] ?? templates.find(item => item.type === searchType);
+  const searchExamples = searchType ? examplesByType[searchType] ?? [] : [];
+  const showSearchResults = normalizedSearch.length > 0 &&
+    (active === "Home" || active === "Templates") &&
+    !selectedTemplate;
+  const renderHomeTemplateCard = (item: typeof templates[number]) => (
+    <button className="home-template-card" key={item.title} type="button" onClick={() => chooseTemplate(item)}>
+      <div className="home-template-image">
+        <img
+          src={`https://images.unsplash.com/${item.image}?auto=format&fit=crop&w=640&h=420&q=82`}
+          alt={`${item.title} photo template`}
+          loading="lazy"
+          decoding="async"
+        />
+        <span>{item.type}</span>
+      </div>
+      <strong>{item.title}</strong>
+      <small>{item.size}</small>
+    </button>
+  );
 
   if (supabase && (!authReady || (user && !cloudSyncReady))) {
     return <div className="auth-loading" role="status">Connecting your SmartShare workspace…</div>;
@@ -624,7 +716,72 @@ function App() {
             </div>
           )}
           {cloudError && <div className="cloud-error-notice" role="alert">{cloudError}</div>}
-          {active === 'Team' ? (
+          {showSearchResults ? (
+            <section className="search-results-page">
+              <div className="search-results-heading">
+                <div className="eyebrow">SMARTSHARE SEARCH</div>
+                <h1>Results for “{search.trim()}”</h1>
+                <p>Choose a format to start, or pick a photo example to customize.</p>
+              </div>
+
+              {searchFormatsForQuery.length > 0 && (
+                <section className="search-format-section">
+                  <div className="section-heading">
+                    <div><h2>Start with a format</h2><p>Popular sizes and design types</p></div>
+                  </div>
+                  <div className="search-format-row">
+                    {searchFormatsForQuery.map(format => (
+                      <button
+                        className="search-format-card"
+                        key={format.title}
+                        type="button"
+                        onClick={() => createProject(format.title, format.templateTitle)}
+                      >
+                        <span className={`quick-icon ${format.type === "Social Media" ? "pink" : format.type === "Presentation" ? "blue" : "purple"}`}>{format.icon}</span>
+                        <strong>{format.title}</strong>
+                        <small>{format.size}</small>
+                      </button>
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              {searchTemplate && searchExamples.length > 0 && (
+                <section className="search-example-section">
+                  <div className="section-heading">
+                    <div><h2>Photo templates for {searchType}</h2><p>Choose a design, then edit its text and details in the editor.</p></div>
+                    <button className="view-all" type="button" onClick={() => { setCategory(searchType ?? "All"); navigate("Templates"); }}>Browse all →</button>
+                  </div>
+                  <div className="search-example-grid">
+                    {searchExamples.map((example, index) => (
+                      <button
+                        className="search-example-card"
+                        key={`${searchType}-${example.name}`}
+                        type="button"
+                        onClick={() => void createExampleProject(searchTemplate, example, index)}
+                      >
+                        <img
+                          src={`https://images.unsplash.com/${example.image}?auto=format&fit=crop&w=600&h=420&q=82`}
+                          alt={`${searchType} example: ${example.name}`}
+                          loading="lazy"
+                          decoding="async"
+                        />
+                        <span className="search-example-overlay"><strong>{example.name}</strong><small>Edit this design ↗</small></span>
+                      </button>
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              {searchFormatsForQuery.length === 0 && searchExamples.length === 0 && (
+                <div className="search-empty-state">
+                  <span>⌕</span>
+                  <h2>No matching designs yet</h2>
+                  <p>Try another search, like Instagram, presentation, video, or logo.</p>
+                </div>
+              )}
+            </section>
+          ) : active === 'Team' ? (
             <section className="team-section">
               <div className="section-heading">
                 <div><div className="eyebrow">TEAM WORKSPACE</div><h1>Members</h1><p>Invite and manage people in your workspace.</p></div>
@@ -819,119 +976,119 @@ function App() {
             </section>
           ) : (
             <>
-          <section className="welcome-row">
-            <div>
-              <div className="eyebrow">YOUR CREATIVE SPACE</div>
-              <h1>Good things start with<br /><span>an idea.</span></h1>
-              <p>Bring your imagination to life. Create something extraordinary with SmartShare.</p>
-              <button className="hero-button" onClick={() => createProject()}>
-                ＋ Create a design <span>→</span>
-              </button>
+          <section className="home-discovery-hero">
+            <div className="eyebrow">YOUR SMARTSHARE WORKSPACE</div>
+            <h1>What will you create today?</h1>
+            <p>Start with a format, find a photo template, and make it your own.</p>
+            <div className="home-view-toggle" role="group" aria-label="Workspace pages">
+              <button className="selected" type="button" onClick={() => navigate("Home")}>⌂ Home</button>
+              <button type="button" onClick={() => navigate("Templates")}>▦ Templates</button>
             </div>
-            <div className="hero-art">
-              <div className="art-card art-card-one">✦</div>
-              <div className="art-card art-card-two">Aa</div>
-              <div className="art-card art-card-three">◈</div>
-              <div className="art-circle">S</div>
-              <div className="art-caption">MAKE IT<br />YOURS.</div>
-            </div>
-          </section>
-
-          <section className="quick-section">
-            <div className="section-heading">
-              <div>
-                <h2>What would you like to create?</h2>
-                <p>Choose a canvas and let your creativity flow.</p>
-              </div>
-            </div>
-            <div className="quick-grid">
-              {[
-                ["▣", "Social Post", "pink"],
-                ["▶", "Video", "orange"],
-                ["▤", "Presentation", "blue"],
-                ["✦", "Logo", "purple"],
-                ["▧", "Photo Edit", "green"],
-                ["＋", "Custom Size", "yellow"],
-              ].map(([icon, title, color]) => (
-                <button className="quick-card" key={title} onClick={() => createProject(`${title} design`)}>
-                  <span className={`quick-icon ${color}`}>{icon}</span>
-                  <strong>{title}</strong>
-                  <span className="quick-arrow">↗</span>
-                </button>
-              ))}
-            </div>
-          </section>
-
-          {sortedProjects.length > 0 && (
-            <section className="projects-section">
-              <div className="section-heading">
-                <div>
-                  <h2>Recent projects</h2>
-                  <p>{user ? 'Your designs sync to your account.' : 'Your designs are saved in this browser.'}</p>
-                </div>
-                <button className="view-all" onClick={() => setActive('Projects')}>View all →</button>
-              </div>
-              <div className="projects-grid">
-                {sortedProjects.slice(0, 3).map(project => (
-                  <button
-                    className="project-card"
-                    key={project.id}
-                    onClick={() => setOpenProjectId(project.id)}
-                  >
-                    <span className="project-card-preview">S</span>
-                    <strong>{project.name}</strong>
-                    <small>Edited {new Date(project.updatedAt).toLocaleDateString()}</small>
-                  </button>
-                ))}
-              </div>
-            </section>
-          )}
-
-          <section className="template-section">
-            <div className="section-heading template-heading">
-              <div>
-                <h2>Explore templates</h2>
-                <p>Beautiful starting points for your next big idea.</p>
-              </div>
-              <button className="view-all" onClick={() => setCategory("All")}>View all →</button>
-            </div>
-
-            <div className="category-tabs">
-              {categories.map((item) => (
+            <label className="home-search-box">
+              <span aria-hidden="true">⌕</span>
+              <input
+                value={search}
+                onChange={event => setSearch(event.target.value)}
+                placeholder="Search Instagram, presentations, posters..."
+                aria-label="Search design formats and photo templates"
+              />
+              <kbd>↵</kbd>
+            </label>
+            <div className="home-quick-row" aria-label="Popular design categories">
+              {homeQuickLinks.map(item => (
                 <button
-                  key={item}
-                  className={category === item ? "category active-category" : "category"}
-                  onClick={() => setCategory(item)}
+                  type="button"
+                  className="home-quick-link"
+                  key={item.title}
+                  onClick={() => { setCategory(item.category); navigate("Templates"); }}
                 >
-                  {item}
+                  <span className={`quick-icon ${item.color}`}>{item.icon}</span>
+                  <strong>{item.title}</strong>
                 </button>
               ))}
             </div>
+          </section>
 
-            <div className="template-grid">
-              {filteredTemplates.map((item) => (
-                <button className="template-card" key={item.title} onClick={() => chooseTemplate(item)}>
-                  <div className={`template-photo-preview ${item.style}`}>
-                    <img
-                      src={`https://images.unsplash.com/${item.image}?auto=format&fit=crop&w=800&q=85`}
-                      alt={`${item.title} template preview`}
-                      loading="lazy"
-                      decoding="async"
-                    />
-                    <span className="template-photo-type">{item.type}</span>
-                    <div className="template-photo-caption">
-                      <strong>{item.headline}</strong>
-                      <small>{item.subtitle}</small>
-                    </div>
-                  </div>
-                  <div className="template-info">
-                    <div><strong>{item.title}</strong><small>{item.type} · {item.size}</small></div>
-                    <span>Customize ↗</span>
-                  </div>
+          <section className="home-section">
+            <div className="section-heading">
+              <div><h2>Continue designing</h2><p>{user ? 'Your designs sync to your account.' : 'Your designs are saved in this browser.'}</p></div>
+              {sortedProjects.length > 0 && <button className="view-all" type="button" onClick={() => navigate("Projects")}>See all →</button>}
+            </div>
+            {sortedProjects.length > 0 ? (
+              <div className="home-card-strip">
+                {sortedProjects.slice(0, 8).map(project => {
+                  const preview = getProjectPreview(project.design);
+                  return (
+                    <button className="home-project-card" key={project.id} type="button" onClick={() => setOpenProjectId(project.id)}>
+                      <div className="home-project-image">
+                        {preview ? <img src={preview} alt="" loading="lazy" /> : <span>✦</span>}
+                      </div>
+                      <strong>{project.name}</strong>
+                      <small>Edited {new Date(project.updatedAt).toLocaleDateString()}</small>
+                    </button>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="home-empty-design">
+                <span>✦</span>
+                <div><strong>Your recent designs will show up here</strong><small>Pick a photo template below or start with a blank design.</small></div>
+                <button type="button" onClick={() => createProject()}>＋ Create a design</button>
+              </div>
+            )}
+          </section>
+
+          <section className="home-section">
+            <div className="section-heading">
+              <div><h2>Templates for you</h2><p>Photo-rich starting points for your next idea.</p></div>
+              <button className="view-all" type="button" onClick={() => { setCategory("All"); navigate("Templates"); }}>See all →</button>
+            </div>
+            <div className="home-card-strip">{templates.slice(0, 6).map(renderHomeTemplateCard)}</div>
+          </section>
+
+          <section className="home-section">
+            <div className="section-heading">
+              <div><h2>Browse template categories</h2><p>Jump straight into the kind of design you need.</p></div>
+            </div>
+            <div className="home-category-grid">
+              {categories.slice(1).map(type => {
+                const item = templates.find(template => template.type === type);
+                if (!item) return null;
+                return (
+                  <button
+                    className="home-category-card"
+                    key={type}
+                    type="button"
+                    onClick={() => { setCategory(type); navigate("Templates"); }}
+                  >
+                    <img src={`https://images.unsplash.com/${item.image}?auto=format&fit=crop&w=420&h=180&q=78`} alt="" loading="lazy" />
+                    <span><strong>{type}</strong><small>{templates.filter(template => template.type === type).length} design types</small></span>
+                    <b aria-hidden="true">→</b>
+                  </button>
+                );
+              })}
+            </div>
+          </section>
+
+          <section className="home-section">
+            <div className="section-heading">
+              <div><h2>Frequently used</h2><p>Quickly start with a popular canvas size.</p></div>
+            </div>
+            <div className="home-format-strip">
+              {[searchFormats[0], searchFormats[8], searchFormats[12], searchFormats[1], searchFormats[10], searchFormats[14]].map(format => (
+                <button className="home-format-card" key={format.title} type="button" onClick={() => createProject(format.title, format.templateTitle)}>
+                  <span>{format.icon}</span><strong>{format.title}</strong><small>{format.size}</small>
                 </button>
               ))}
-              {filteredTemplates.length === 0 && <p>No matching templates found.</p>}
             </div>
+          </section>
+
+          <section className="home-section">
+            <div className="section-heading">
+              <div><h2>Popular on SmartShare</h2><p>Fresh ideas picked for the community.</p></div>
+              <button className="view-all" type="button" onClick={() => { setCategory("All"); navigate("Templates"); }}>Browse templates →</button>
+            </div>
+            <div className="home-card-strip">{templates.slice(6, 12).map(renderHomeTemplateCard)}</div>
           </section>
 
           <section className="ai-banner">
