@@ -751,6 +751,9 @@ button { cursor: pointer; }
 .ss-brand span { color: #222; }
 .ss-top-title { font-weight: 600; color: #555; }
 .ss-project-name {
+  flex: 1 1 260px;
+  min-width: 160px;
+  max-width: 380px;
   width: min(260px, 30vw);
   padding: 8px 10px;
   border: 1px solid transparent;
@@ -1252,4 +1255,260 @@ button { cursor: pointer; }
     max-height: 100dvh;
     overflow-y: auto;
   }
+}
+
+/* Readable text sizing across the workspace and editor. */
+.menu-label,
+.eyebrow,
+.ai-label,
+.billing-badge,
+.template-photo-type,
+.home-template-image > span {
+  font-size: 12px;
+}
+
+.nav-item,
+.create-button,
+.breadcrumb,
+.search-box input,
+.home-view-toggle button,
+.home-template-card > strong,
+.home-project-card > strong,
+.home-category-card strong,
+.home-format-card strong,
+.search-format-card strong,
+.template-info strong,
+.project-card strong,
+.template-example-action,
+.view-all,
+.hero-button,
+.ss-category-list button,
+.ss-template-card span,
+.ss-action,
+.ss-format-row button {
+  font-size: 15px;
+}
+
+.upgrade-card strong,
+.profile strong { font-size: 15px; }
+.upgrade-card p,
+.upgrade-card button,
+.profile small,
+.profile-dots,
+.breadcrumb,
+.search-box kbd,
+.section-heading p,
+.welcome-row p,
+.cloud-setup-notice,
+.cloud-error-notice,
+.template-photo-caption small,
+.home-template-card > small,
+.home-project-card > small,
+.home-empty-design small,
+.home-category-card small,
+.home-format-card small,
+.search-results-heading p,
+.search-format-card small,
+.search-example-overlay small,
+.search-empty-state p,
+.template-info small,
+.project-card small,
+.all-projects-section .section-heading p,
+.empty-projects p,
+.billing-note,
+.billing-price small,
+.studio-grid button small,
+.admin-grid small,
+.team-empty small,
+.footer,
+.auth-dialog > p,
+.auth-dialog form label,
+.auth-mode-toggle,
+.auth-message,
+.auth-error,
+.ss-save-status,
+.ss-export-menu p,
+.ss-export-quality-label,
+.ss-adjust-empty p,
+.ss-settings label {
+  font-size: 13px;
+}
+
+.upgrade-card p,
+.profile small,
+.section-heading p,
+.home-template-card > small,
+.home-project-card > small,
+.home-empty-design small,
+.home-category-card small,
+.home-format-card small,
+.search-results-heading p,
+.search-format-card small,
+.search-example-overlay small,
+.template-info small,
+.project-card small,
+.all-projects-section .section-heading p,
+.empty-projects p,
+.billing-note,
+.studio-grid button small,
+.admin-grid small,
+.team-empty small,
+.footer {
+  color: #666579;
+}
+
+.eyebrow {
+  color: #7054c8;
+}
+
+.welcome-row .eyebrow {
+  color: #e7deff;
+}
+
+.search-box input,
+.home-search-box input,
+.home-view-toggle button,
+.quick-card strong,
+.home-quick-link strong,
+.home-category-card strong,
+.home-format-card strong,
+.search-format-card strong,
+.search-example-overlay strong,
+.template-info strong,
+.project-card strong,
+.project-card-actions button,
+.studio-grid button strong,
+.ss-top-actions .ss-export-menu button,
+.ss-option,
+.ss-text-style {
+  font-size: 15px;
+}
+
+.search-box kbd,
+.home-search-box kbd,
+.home-quick-link strong,
+.template-photo-type,
+.home-template-image > span,
+.billing-badge,
+.ai-label,
+.preview-top {
+  font-size: 12px;
+}
+
+.home-discovery-hero > p,
+.home-search-box input {
+  font-size: 15px;
+}
+
+.home-search-box kbd { color: #666579; }
+
+.home-quick-row {
+  justify-content: flex-start;
+  padding-right: 4px;
+}
+
+.home-quick-link {
+  flex-basis: 88px;
+}
+
+.home-quick-link strong {
+  max-width: 88px;
+  overflow: visible;
+  text-align: center;
+  text-overflow: clip;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.25;
+  font-size: 14px;
+}
+
+.home-template-card > strong,
+.home-project-card > strong,
+.home-category-card strong,
+.home-format-card strong,
+.search-example-overlay strong,
+.template-info strong,
+.project-card strong {
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.3;
+}
+
+.home-category-card strong { font-size: 15px; }
+.category { font-size: 14px; }
+.home-format-card { min-height: 76px; }
+.home-format-card strong { font-size: 14px; }
+.home-empty-design strong { font-size: 14px; }
+.home-empty-design button { font-size: 14px; }
+.home-category-card b { font-size: 15px; }
+.search-empty-state h2 { font-size: 22px; }
+.template-photo-caption strong { font-size: 18px; line-height: 1.25; }
+.template-info > span { font-size: 14px; }
+.all-projects-section .section-heading h1 { font-size: 36px; }
+.project-card-actions { flex-wrap: wrap; gap: 7px; }
+.project-card-actions button { min-height: 34px; padding: 7px 9px; }
+.admin-grid strong { font-size: 30px; }
+.studio-grid button strong { line-height: 1.35; }
+.auth-dialog form label { color: #454458; }
+.profile > div:nth-child(2) strong {
+  max-width: 100%;
+  overflow: visible;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+.ai-banner p { font-size: 14px; }
+.ai-banner button { font-size: 14px; }
+.ss-top-actions .ss-export-menu button { line-height: 1.4; }
+.ss-export-quality-label { color: #666579; }
+.ss-tool-rail { width: 84px; }
+.ss-tool-rail button small {
+  font-size: 12px;
+  line-height: 1.25;
+  overflow-wrap: normal;
+}
+.ss-panel-heading h2 { font-size: 21px; }
+.ss-panel-content h3 { font-size: 17px; }
+.ss-search { font-size: 14px; }
+.ss-template-card span { line-height: 1.35; }
+.ss-rotation-presets .ss-option { font-size: 13px; }
+.ss-flip-controls .ss-option { font-size: 14px; }
+
+@media (max-width: 1100px) {
+  .topbar { gap: 12px; padding: 0 24px; }
+  .breadcrumb { white-space: nowrap; }
+  .search-box { width: min(280px, 34vw); }
+  .top-actions { gap: 10px; }
+  .create-button { padding: 14px 8px; font-size: 14px; white-space: nowrap; }
+}
+
+@media (max-width: 760px) {
+  .nav-item { font-size: 0; }
+  .sidebar-expanded .nav-item { font-size: 15px; }
+  .home-quick-link { flex-basis: 88px; }
+  .ss-tool-rail { width: 72px; }
+  .ss-tool-rail button small { font-size: 11px; }
+  .ss-topbar {
+    height: auto;
+    min-height: 100px;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 8px;
+  }
+  .ss-brand { flex: 0 0 auto; font-size: 16px; }
+  .ss-project-name {
+    flex: 1 1 190px;
+    width: auto;
+    min-width: 140px;
+    max-width: none;
+    font-size: 14px;
+    text-align: left;
+  }
+  .ss-top-actions { flex: 1 1 100%; justify-content: flex-end; gap: 4px; }
+  .ss-save-status { display: none; }
+  .ss-top-actions button { padding: 7px 8px; font-size: 13px; }
+  .ss-category-list button { font-size: 14px; }
+  .ss-template-card span { font-size: 14px; }
+  .ss-export-menu { width: min(280px, calc(100vw - 24px)); }
 }
