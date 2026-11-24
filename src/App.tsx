@@ -36,6 +36,73 @@ const templates = [
   { title: "Event Announcement", type: "Event", size: "1080 × 1350", style: "orange", image: "photo-1511285560929-80b456fea0bc", icon: "✦", headline: "Save the date", subtitle: "An evening of ideas, music and people", background: "#fff0df", accent: "#dd8b3f", textColor: "#71331d" },
 ];
 
+const examplesByType: Record<string, Array<{ name: string; image: string }>> = {
+  "Social Media": [
+    { name: "Fresh & bright", image: "photo-1611162617474-5b21e879e113" },
+    { name: "Color pop", image: "photo-1611262588024-d12430b98920" },
+    { name: "Editorial", image: "photo-1611162616305-c69b3fa7fbe0" },
+    { name: "Minimal", image: "photo-1490750967868-88aa4486c946" },
+    { name: "Lifestyle", image: "photo-1500530855697-b586d89ba3ee" },
+    { name: "Bold story", image: "photo-1530103862676-de8c9debad1d" },
+  ],
+  Video: [
+    { name: "Creator spotlight", image: "photo-1611162616475-46b635cb6868" },
+    { name: "Big reveal", image: "photo-1611162618071-b39a2ec055fb" },
+    { name: "Travel vlog", image: "photo-1500530855697-b586d89ba3ee" },
+    { name: "How-to guide", image: "photo-1454165804606-c3d57bc86b40" },
+    { name: "New episode", image: "photo-1492619375914-88005aa9e8fb" },
+    { name: "Weekend edit", image: "photo-1470225620780-dba8ba36b745" },
+  ],
+  Presentation: [
+    { name: "Modern business", image: "photo-1454165804606-c3d57bc86b40" },
+    { name: "Startup pitch", image: "photo-1497366754035-f200968a6e72" },
+    { name: "Clean minimal", image: "photo-1497366216548-37526070297c" },
+    { name: "Creative studio", image: "photo-1497366811353-6870744d04b2" },
+    { name: "Strategy deck", image: "photo-1552664730-d307ca884978" },
+    { name: "Project overview", image: "photo-1507679799987-c73779587ccf" },
+  ],
+  Logo: [
+    { name: "Studio identity", image: "photo-1626785774573-4b799315345d" },
+    { name: "Modern mark", image: "photo-1504270997636-07ddfbd48945" },
+    { name: "Creative brand", image: "photo-1634942536790-2537db5a8e3d" },
+    { name: "Natural style", image: "photo-1490750967868-88aa4486c946" },
+    { name: "Bold identity", image: "photo-1558655146-d09347e92766" },
+    { name: "Simple & clean", image: "photo-1500534623283-312aade485b7" },
+  ],
+  Marketing: [
+    { name: "Product launch", image: "photo-1611162616305-c69b3fa7fbe0" },
+    { name: "Seasonal offer", image: "photo-1490481651871-ab68de25d43d" },
+    { name: "Outdoor campaign", image: "photo-1500530855697-b586d89ba3ee" },
+    { name: "Bright promotion", image: "photo-1542291026-7eec264c27ff" },
+    { name: "New collection", image: "photo-1483985988355-763728e1935b" },
+    { name: "Product story", image: "photo-1523275335684-37898b6baf30" },
+  ],
+  Business: [
+    { name: "Team & culture", image: "photo-1497366754035-f200968a6e72" },
+    { name: "Professional", image: "photo-1507679799987-c73779587ccf" },
+    { name: "Service highlight", image: "photo-1497366216548-37526070297c" },
+    { name: "Business growth", image: "photo-1552664730-d307ca884978" },
+    { name: "Product showcase", image: "photo-1523275335684-37898b6baf30" },
+    { name: "Workspace", image: "photo-1497366811353-6870744d04b2" },
+  ],
+  Event: [
+    { name: "Wedding day", image: "photo-1519741497674-611481863552" },
+    { name: "Garden party", image: "photo-1511285560929-80b456fea0bc" },
+    { name: "Birthday party", image: "photo-1530103862676-de8c9debad1d" },
+    { name: "Evening celebration", image: "photo-1511795409834-ef04bbd61622" },
+    { name: "Save the date", image: "photo-1464366400600-7168b8af9bc3" },
+    { name: "Special moment", image: "photo-1464366400600-7168b8af9bc3" },
+  ],
+  Education: [
+    { name: "Learning together", image: "photo-1503676260728-1c00da094a0b" },
+    { name: "Study guide", image: "photo-1434030216411-0b793f4b4173" },
+    { name: "Classroom", image: "photo-1509062522246-3755977927d7" },
+    { name: "Creative learning", image: "photo-1503454537195-1dcabb73ffb9" },
+    { name: "School project", image: "photo-1427504494785-3a9ca7044f45" },
+    { name: "New ideas", image: "photo-1509062522246-3755977927d7" },
+  ],
+};
+
 const menu = [
   ["⌂", "Home"],
   ["▦", "Templates"],
@@ -48,7 +115,31 @@ const menu = [
   ["◉", "Admin"],
 ];
 
-function createTemplateDesign(template: typeof templates[number]) {
+function createTemplateDesign(
+  template: typeof templates[number],
+  example?: { imageDataUrl: string; name: string; variant: number }
+) {
+  if (example) {
+    const align = example.variant % 2 === 0 ? "left" : "center";
+    const x = align === "left" ? 64 : 400;
+    return {
+      items: [
+        { id: 1, type: "image", x: 0, y: 0, width: 800, height: 500, src: example.imageDataUrl, color: "#ffffff", fontSize: 24 },
+        { id: 2, type: "shape", shapeKind: "rectangle", x: 0, y: 280, width: 800, height: 220, color: "#171521", fontSize: 24, opacity: 0.68, fillType: "solid" },
+        { id: 3, type: "text", x, y: 338, text: example.name.toUpperCase(), color: "#ffffff", fontSize: 14, bold: true, textAlign: align, letterSpacing: 2 },
+        { id: 4, type: "text", x, y: 395, text: template.headline, color: "#ffffff", fontSize: 36, bold: true, textAlign: align },
+        { id: 5, type: "text", x, y: 438, text: template.subtitle, color: "#ffffff", fontSize: 18, textAlign: align },
+        { id: 6, type: "text", x, y: 475, text: "MAKE IT YOURS  →", color: "#ffffff", fontSize: 12, bold: true, textAlign: align, letterSpacing: 1 },
+      ],
+      background: "#171521",
+      backgroundFillType: "solid",
+      backgroundColor2: template.accent,
+      backgroundColor3: template.textColor,
+      backgroundUseThirdColor: false,
+      backgroundDirection: "horizontal",
+    };
+  }
+
   const align = ["Business", "Presentation", "Video", "Marketing"].includes(template.type)
     ? "left"
     : "center";
@@ -75,6 +166,7 @@ function App() {
   const [projects, setProjects] = useState<ProjectRecord<unknown>[]>(() => readProjects());
   const [openProjectId, setOpenProjectId] = useState<string | null>(null);
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState<typeof templates[number] | null>(null);
   const [active, setActive] = useState(() => {
     const hash = window.location.hash.replace('#/', '').replace('#', '');
     return hash || 'Home';
@@ -121,6 +213,7 @@ function App() {
   }, []);
 
   const navigate = (name: string) => {
+    if (name !== 'Templates') setSelectedTemplate(null);
     setActive(name);
     window.location.hash = `/${name}`;
   };
@@ -219,7 +312,11 @@ function App() {
     }
   };
 
-  const createProject = (name = 'Untitled design', starterTitle?: string) => {
+  const createProject = (
+    name = 'Untitled design',
+    starterTitle?: string,
+    example?: { imageDataUrl: string; name: string; variant: number }
+  ) => {
     const now = new Date().toISOString();
     const selectedTemplate = templates.find(template => template.title === starterTitle);
     const project: ProjectRecord<unknown> = {
@@ -227,7 +324,7 @@ function App() {
       name,
       createdAt: now,
       updatedAt: now,
-      design: selectedTemplate ? createTemplateDesign(selectedTemplate) : {
+      design: selectedTemplate ? createTemplateDesign(selectedTemplate, example) : {
         items: starterTitle ? [
           {
             id: 1,
@@ -265,6 +362,42 @@ function App() {
     } catch (error) {
       console.error('Could not create project.', error);
       window.alert('Could not create this project. Please check available browser storage.');
+    }
+  };
+
+  const chooseTemplate = (template: typeof templates[number]) => {
+    setSelectedTemplate(template);
+    navigate('Templates');
+  };
+
+  const createExampleProject = async (
+    template: typeof templates[number],
+    example: { name: string; image: string },
+    variant: number
+  ) => {
+    const imageUrl = `https://images.unsplash.com/${example.image}?auto=format&fit=crop&w=800&h=500&q=82`;
+
+    try {
+      const response = await fetch(imageUrl, { mode: 'cors' });
+      if (!response.ok) throw new Error(`Example image request failed with status ${response.status}.`);
+      const blob = await response.blob();
+      const imageDataUrl = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => typeof reader.result === 'string'
+          ? resolve(reader.result)
+          : reject(new Error('Could not read the selected example image.'));
+        reader.onerror = () => reject(reader.error ?? new Error('Could not read the selected example image.'));
+        reader.readAsDataURL(blob);
+      });
+
+      createProject(`${template.title} - ${example.name}`, template.title, {
+        imageDataUrl,
+        name: example.name,
+        variant
+      });
+    } catch (error) {
+      console.error('Could not create a design from the selected example.', error);
+      window.alert('This example could not be loaded. Please choose another one or try again.');
     }
   };
 
@@ -511,6 +644,43 @@ function App() {
                 <article><small>Account</small><strong>{user ? 'Active' : 'Guest'}</strong></article>
               </div>
             </section>
+          ) : active === 'Templates' && selectedTemplate ? (
+            <section className="template-examples-section">
+              <button className="view-all" type="button" onClick={() => setSelectedTemplate(null)}>← All templates</button>
+              <div className="section-heading">
+                <div>
+                  <div className="eyebrow">{selectedTemplate.type.toUpperCase()} EXAMPLES</div>
+                  <h1>{selectedTemplate.title}</h1>
+                  <p>Pick an example to open it in the editor. Change anything you like, or download it from the editor.</p>
+                </div>
+              </div>
+              <div className="template-examples-grid">
+                {(examplesByType[selectedTemplate.type] ?? []).map((example, index) => (
+                  <article className="template-example-card" key={`${selectedTemplate.title}-${example.name}`}>
+                    <div className={`template-photo-preview ${selectedTemplate.style}`}>
+                      <img
+                        src={`https://images.unsplash.com/${example.image}?auto=format&fit=crop&w=800&h=500&q=82`}
+                        alt={`${selectedTemplate.title} example: ${example.name}`}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                      <span className="template-photo-type">{example.name}</span>
+                      <div className="template-photo-caption">
+                        <strong>{selectedTemplate.headline}</strong>
+                        <small>{selectedTemplate.subtitle}</small>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      className="template-example-action"
+                      onClick={() => void createExampleProject(selectedTemplate, example, index)}
+                    >
+                      Edit & download ↗
+                    </button>
+                  </article>
+                ))}
+              </div>
+            </section>
           ) : active === 'Templates' ? (
             <section className="template-library-section">
               <div className="section-heading"><div><div className="eyebrow">TEMPLATE LIBRARY</div><h1>Pick a design you love</h1><p>Choose any template below, then edit its text, colors, and layers in the editor.</p></div></div>
@@ -521,7 +691,7 @@ function App() {
               </div>
               <div className="template-grid">
                 {filteredTemplates.map(item => (
-                  <button className="template-card" key={item.title} onClick={() => createProject(item.title, item.title)}>
+                  <button className="template-card" key={item.title} onClick={() => chooseTemplate(item)}>
                     <div className={`template-photo-preview ${item.style}`}>
                       <img
                         src={`https://images.unsplash.com/${item.image}?auto=format&fit=crop&w=800&q=85`}
@@ -740,7 +910,7 @@ function App() {
 
             <div className="template-grid">
               {filteredTemplates.map((item) => (
-                <button className="template-card" key={item.title} onClick={() => createProject(item.title, item.title)}>
+                <button className="template-card" key={item.title} onClick={() => chooseTemplate(item)}>
                   <div className={`template-photo-preview ${item.style}`}>
                     <img
                       src={`https://images.unsplash.com/${item.image}?auto=format&fit=crop&w=800&q=85`}

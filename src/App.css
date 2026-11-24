@@ -464,6 +464,11 @@ button { cursor: pointer; }
 }
 .template-photo-caption strong { font: 700 16px 'Outfit', sans-serif; line-height: 1.15; }
 .template-photo-caption small { font-size: 9px; line-height: 1.35; opacity: .9; }
+.template-examples-section { max-width: 1200px; margin: 0 auto; }
+.template-examples-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.template-example-card { min-width: 0; padding: 9px; border: 1px solid #ededf3; border-radius: 12px; background: #fff; }
+.template-example-action { width: 100%; margin-top: 9px; padding: 10px 12px; border: 0; border-radius: 8px; background: #f1edff; color: #6847df; font-size: 12px; font-weight: 700; }
+.template-example-action:hover { background: #e8e0ff; }
 
 .template-preview {
   height: 155px; border-radius: 8px; padding: 15px; overflow: hidden;
@@ -1015,6 +1020,7 @@ button { cursor: pointer; }
   .hero-art { display: none; }
   .quick-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .template-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .template-examples-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
   .projects-grid, .all-projects-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .template-preview { height: 125px; }
   .template-photo-preview { height: 135px; }
@@ -1050,6 +1056,7 @@ button { cursor: pointer; }
 
 @media (max-width: 390px) {
   .template-grid { grid-template-columns: 1fr; }
+  .template-examples-grid { grid-template-columns: 1fr; }
   .search-box kbd { display: none; }
   .welcome-row h1 { font-size: 29px; }
 }
