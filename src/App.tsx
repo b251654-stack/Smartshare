@@ -18,22 +18,22 @@ const categories = [
 ];
 
 const templates = [
-  { title: "Instagram Post", type: "Social Media", size: "1080 × 1080", style: "pink", icon: "◎", headline: "Make today memorable", subtitle: "A little inspiration for your feed", background: "#fff1f6", accent: "#d64f89", textColor: "#70234b" },
-  { title: "Instagram Story", type: "Social Media", size: "1080 × 1920", style: "green", icon: "▯", headline: "Your next chapter", subtitle: "Share something worth remembering", background: "#eaf8f1", accent: "#319c70", textColor: "#164e40" },
-  { title: "YouTube Thumbnail", type: "Video", size: "1280 × 720", style: "orange", icon: "▶", headline: "You need to see this!", subtitle: "The complete guide starts here", background: "#fff0df", accent: "#e56e40", textColor: "#71331d" },
-  { title: "YouTube Channel Banner", type: "Video", size: "2560 × 1440", style: "dark", icon: "▶", headline: "Create. Learn. Repeat.", subtitle: "New videos every week", background: "#242236", accent: "#f9e7a6", textColor: "#ffffff" },
-  { title: "Business Presentation", type: "Presentation", size: "16:9", style: "blue", icon: "▤", headline: "Ideas into impact", subtitle: "A clear plan for what comes next", background: "#edf3ff", accent: "#527ee3", textColor: "#24385f" },
-  { title: "Pitch Deck Cover", type: "Presentation", size: "16:9", style: "purple", icon: "↗", headline: "The future starts here", subtitle: "Company name · Investor presentation", background: "#f4efff", accent: "#8054dc", textColor: "#39275f" },
-  { title: "Brand Logo", type: "Logo", size: "500 × 500", style: "dark", icon: "✦", headline: "YOUR BRAND", subtitle: "Make it unforgettable", background: "#26243a", accent: "#f9e7a6", textColor: "#ffffff" },
-  { title: "Startup Logo", type: "Logo", size: "500 × 500", style: "blue", icon: "✧", headline: "NOVA", subtitle: "Ideas that move us forward", background: "#eaf1ff", accent: "#527ee3", textColor: "#24385f" },
-  { title: "Marketing Poster", type: "Marketing", size: "A4 Portrait", style: "purple", icon: "✳", headline: "A brighter kind of bold", subtitle: "Discover the collection made for you", background: "#f4efff", accent: "#8054dc", textColor: "#39275f" },
-  { title: "Product Launch Ad", type: "Marketing", size: "1080 × 1350", style: "orange", icon: "✦", headline: "Meet your new favorite", subtitle: "Available now · Explore the launch", background: "#fff4e8", accent: "#d97736", textColor: "#653a20" },
-  { title: "Business Flyer", type: "Business", size: "A4 Portrait", style: "blue", icon: "▣", headline: "Good work starts here", subtitle: "Professional service, personal care", background: "#edf3ff", accent: "#527ee3", textColor: "#24385f" },
-  { title: "Business Card", type: "Business", size: "3.5 × 2 in", style: "dark", icon: "▤", headline: "ALEX MORGAN", subtitle: "Creative Director · hello@example.com", background: "#242236", accent: "#f0bf72", textColor: "#ffffff" },
-  { title: "Wedding Invitation", type: "Event", size: "5 × 7 in", style: "pink", icon: "♡", headline: "Together with our families", subtitle: "Join us to celebrate love · June 20", background: "#fff7f2", accent: "#b76e79", textColor: "#684852" },
-  { title: "Birthday Invitation", type: "Event", size: "1080 × 1350", style: "yellow", icon: "✳", headline: "Let's celebrate!", subtitle: "You're invited · Saturday at 6 PM", background: "#fff8df", accent: "#c29331", textColor: "#624d1f" },
-  { title: "Education Poster", type: "Education", size: "A4 Portrait", style: "green", icon: "✎", headline: "Curiosity changes everything", subtitle: "Learn something new every day", background: "#eaf8f1", accent: "#319c70", textColor: "#164e40" },
-  { title: "Event Announcement", type: "Event", size: "1080 × 1350", style: "orange", icon: "✦", headline: "Save the date", subtitle: "An evening of ideas, music and people", background: "#fff0df", accent: "#dd8b3f", textColor: "#71331d" },
+  { title: "Instagram Post", type: "Social Media", size: "1080 × 1080", style: "pink", image: "photo-1611162617474-5b21e879e113", icon: "◎", headline: "Make today memorable", subtitle: "A little inspiration for your feed", background: "#fff1f6", accent: "#d64f89", textColor: "#70234b" },
+  { title: "Instagram Story", type: "Social Media", size: "1080 × 1920", style: "green", image: "photo-1611262588024-d12430b98920", icon: "▯", headline: "Your next chapter", subtitle: "Share something worth remembering", background: "#eaf8f1", accent: "#319c70", textColor: "#164e40" },
+  { title: "YouTube Thumbnail", type: "Video", size: "1280 × 720", style: "orange", image: "photo-1611162616475-46b635cb6868", icon: "▶", headline: "You need to see this!", subtitle: "The complete guide starts here", background: "#fff0df", accent: "#e56e40", textColor: "#71331d" },
+  { title: "YouTube Channel Banner", type: "Video", size: "2560 × 1440", style: "dark", image: "photo-1611162618071-b39a2ec055fb", icon: "▶", headline: "Create. Learn. Repeat.", subtitle: "New videos every week", background: "#242236", accent: "#f9e7a6", textColor: "#ffffff" },
+  { title: "Business Presentation", type: "Presentation", size: "16:9", style: "blue", image: "photo-1454165804606-c3d57bc86b40", icon: "▤", headline: "Ideas into impact", subtitle: "A clear plan for what comes next", background: "#edf3ff", accent: "#527ee3", textColor: "#24385f" },
+  { title: "Pitch Deck Cover", type: "Presentation", size: "16:9", style: "purple", image: "photo-1497366754035-f200968a6e72", icon: "↗", headline: "The future starts here", subtitle: "Company name · Investor presentation", background: "#f4efff", accent: "#8054dc", textColor: "#39275f" },
+  { title: "Brand Logo", type: "Logo", size: "500 × 500", style: "dark", image: "photo-1626785774573-4b799315345d", icon: "✦", headline: "YOUR BRAND", subtitle: "Make it unforgettable", background: "#26243a", accent: "#f9e7a6", textColor: "#ffffff" },
+  { title: "Startup Logo", type: "Logo", size: "500 × 500", style: "blue", image: "photo-1504270997636-07ddfbd48945", icon: "✧", headline: "NOVA", subtitle: "Ideas that move us forward", background: "#eaf1ff", accent: "#527ee3", textColor: "#24385f" },
+  { title: "Marketing Poster", type: "Marketing", size: "A4 Portrait", style: "purple", image: "photo-1500530855697-b586d89ba3ee", icon: "✳", headline: "A brighter kind of bold", subtitle: "Discover the collection made for you", background: "#f4efff", accent: "#8054dc", textColor: "#39275f" },
+  { title: "Product Launch Ad", type: "Marketing", size: "1080 × 1350", style: "orange", image: "photo-1611162616305-c69b3fa7fbe0", icon: "✦", headline: "Meet your new favorite", subtitle: "Available now · Explore the launch", background: "#fff4e8", accent: "#d97736", textColor: "#653a20" },
+  { title: "Business Flyer", type: "Business", size: "A4 Portrait", style: "blue", image: "photo-1497366754035-f200968a6e72", icon: "▣", headline: "Good work starts here", subtitle: "Professional service, personal care", background: "#edf3ff", accent: "#527ee3", textColor: "#24385f" },
+  { title: "Business Card", type: "Business", size: "3.5 × 2 in", style: "dark", image: "photo-1504270997636-07ddfbd48945", icon: "▤", headline: "ALEX MORGAN", subtitle: "Creative Director · hello@example.com", background: "#242236", accent: "#f0bf72", textColor: "#ffffff" },
+  { title: "Wedding Invitation", type: "Event", size: "5 × 7 in", style: "pink", image: "photo-1519741497674-611481863552", icon: "♡", headline: "Together with our families", subtitle: "Join us to celebrate love · June 20", background: "#fff7f2", accent: "#b76e79", textColor: "#684852" },
+  { title: "Birthday Invitation", type: "Event", size: "1080 × 1350", style: "yellow", image: "photo-1530103862676-de8c9debad1d", icon: "✳", headline: "Let's celebrate!", subtitle: "You're invited · Saturday at 6 PM", background: "#fff8df", accent: "#c29331", textColor: "#624d1f" },
+  { title: "Education Poster", type: "Education", size: "A4 Portrait", style: "green", image: "photo-1503676260728-1c00da094a0b", icon: "✎", headline: "Curiosity changes everything", subtitle: "Learn something new every day", background: "#eaf8f1", accent: "#319c70", textColor: "#164e40" },
+  { title: "Event Announcement", type: "Event", size: "1080 × 1350", style: "orange", image: "photo-1511285560929-80b456fea0bc", icon: "✦", headline: "Save the date", subtitle: "An evening of ideas, music and people", background: "#fff0df", accent: "#dd8b3f", textColor: "#71331d" },
 ];
 
 const menu = [
@@ -522,11 +522,18 @@ function App() {
               <div className="template-grid">
                 {filteredTemplates.map(item => (
                   <button className="template-card" key={item.title} onClick={() => createProject(item.title, item.title)}>
-                    <div className={`template-preview ${item.style}`}>
-                      <div className="preview-top">SMARTSHARE <span>✦</span></div>
-                      <div className="preview-symbol">{item.icon}</div>
-                      <div className="preview-title">{item.headline}</div>
-                      <div className="preview-subtitle">{item.subtitle}</div>
+                    <div className={`template-photo-preview ${item.style}`}>
+                      <img
+                        src={`https://images.unsplash.com/${item.image}?auto=format&fit=crop&w=800&q=85`}
+                        alt={`${item.title} template preview`}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                      <span className="template-photo-type">{item.type}</span>
+                      <div className="template-photo-caption">
+                        <strong>{item.headline}</strong>
+                        <small>{item.subtitle}</small>
+                      </div>
                     </div>
                     <div className="template-info"><div><strong>{item.title}</strong><small>{item.type} · {item.size}</small></div><span>Customize ↗</span></div>
                   </button>
@@ -734,11 +741,18 @@ function App() {
             <div className="template-grid">
               {filteredTemplates.map((item) => (
                 <button className="template-card" key={item.title} onClick={() => createProject(item.title, item.title)}>
-                  <div className={`template-preview ${item.style}`}>
-                    <div className="preview-top">SMARTSHARE <span>✦</span></div>
-                    <div className="preview-symbol">{item.icon}</div>
-                    <div className="preview-title">{item.headline}</div>
-                    <div className="preview-subtitle">{item.subtitle}</div>
+                  <div className={`template-photo-preview ${item.style}`}>
+                    <img
+                      src={`https://images.unsplash.com/${item.image}?auto=format&fit=crop&w=800&q=85`}
+                      alt={`${item.title} template preview`}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <span className="template-photo-type">{item.type}</span>
+                    <div className="template-photo-caption">
+                      <strong>{item.headline}</strong>
+                      <small>{item.subtitle}</small>
+                    </div>
                   </div>
                   <div className="template-info">
                     <div><strong>{item.title}</strong><small>{item.type} · {item.size}</small></div>
