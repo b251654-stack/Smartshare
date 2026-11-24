@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, type MouseEvent as ReactMouseEvent } from 'react';
+import { useCallback, useState, useRef, useEffect, type MouseEvent as ReactMouseEvent } from 'react';
 import './App.css';
 import { readProjects, saveProject, type ProjectRecord } from './projects';
 import { hasPremiumSubscription, saveCloudProject, trackProductEvent, uploadDesignAsset } from './supabase';
@@ -250,54 +250,51 @@ export default function Editor({ projectId, userId, onBack, onUpgrade }: EditorP
     }
   }, [activeTool, selected]);
 
-  useEffect(() => {
-    const timeoutId = window.setTimeout(() => {
-      const design: SavedProject = {
-        items,
-        background,
-        backgroundFillType,
-        backgroundColor2,
-        backgroundColor3,
-        backgroundUseThirdColor,
-        backgroundDirection
+  const saveCurrentProject = useCallback(() => {
+    const design: SavedProject = {
+      items,
+      background,
+      backgroundFillType,
+      backgroundColor2,
+      backgroundColor3,
+      backgroundUseThirdColor,
+      backgroundDirection
+    };
+
+    try {
+      const projectToSave: ProjectRecord<SavedProject> = {
+        id: projectId,
+        name: projectName.trim() || 'Untitled design',
+        createdAt: savedProject?.createdAt ?? new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        design
       };
-      try {
-        const projectToSave: ProjectRecord<SavedProject> = {
-          id: projectId,
-          name: projectName.trim() || 'Untitled design',
-          createdAt: savedProject?.createdAt ?? new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          design
-        };
-        saveProject(projectToSave, userId);
+      saveProject(projectToSave, userId);
 
-        if (!userId) {
-          setSaveStatus('Saved locally');
-          return;
-        }
-
-        cloudSaveSequenceRef.current += 1;
-        const saveSequence = cloudSaveSequenceRef.current;
-        setSaveStatus('Syncing…');
-        void saveCloudProject(userId, projectToSave)
-          .then(() => {
-            if (cloudSaveSequenceRef.current === saveSequence) {
-              setSaveStatus('Saved to cloud');
-            }
-          })
-          .catch(error => {
-            console.error('Could not sync project to cloud.', error);
-            if (cloudSaveSequenceRef.current === saveSequence) {
-              setSaveStatus('Cloud sync failed');
-            }
-          });
-      } catch (error) {
-        console.error('Could not save project.', error);
-        setSaveStatus('Save failed');
+      if (!userId) {
+        setSaveStatus('Saved locally');
+        return;
       }
-    }, 350);
 
-    return () => window.clearTimeout(timeoutId);
+      cloudSaveSequenceRef.current += 1;
+      const saveSequence = cloudSaveSequenceRef.current;
+      setSaveStatus('Syncing…');
+      void saveCloudProject(userId, projectToSave)
+        .then(() => {
+          if (cloudSaveSequenceRef.current === saveSequence) {
+            setSaveStatus('Saved to cloud');
+          }
+        })
+        .catch(error => {
+          console.error('Could not sync project to cloud.', error);
+          if (cloudSaveSequenceRef.current === saveSequence) {
+            setSaveStatus('Cloud sync failed');
+          }
+        });
+    } catch (error) {
+      console.error('Could not save project.', error);
+      setSaveStatus('Save failed');
+    }
   }, [
     items,
     background,
@@ -311,6 +308,16 @@ export default function Editor({ projectId, userId, onBack, onUpgrade }: EditorP
     projectName,
     savedProject?.createdAt
   ]);
+
+  useEffect(() => {
+    const timeoutId = window.setTimeout(saveCurrentProject, 350);
+    return () => window.clearTimeout(timeoutId);
+  }, [saveCurrentProject]);
+
+  const handleBack = () => {
+    saveCurrentProject();
+    onBack?.();
+  };
 
   const getNextId = () => {
     const id = nextIdRef.current;
@@ -1016,7 +1023,7 @@ export default function Editor({ projectId, userId, onBack, onUpgrade }: EditorP
 
         <div className="ss-top-actions">
           <span className="ss-save-status" aria-live="polite">{saveStatus}</span>
-          <button onClick={onBack}>← Back</button>
+          <button onClick={handleBack}>← Back</button>
           <button onClick={undo} disabled={historyIndex === 0} title="Undo">↶</button>
           <button onClick={redo} disabled={historyIndex === history.length - 1} title="Redo">↷</button>
           <div className="ss-export-menu-container">
