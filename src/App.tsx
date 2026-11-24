@@ -193,6 +193,31 @@ const menu = [
   ["◉", "Admin"],
 ];
 
+const sparklePhoto = "photo-1513364776144-60967b0f800f";
+
+function isSparkleIcon(icon: string): boolean {
+  return icon === "✦" || icon === "✧" || icon === "✳";
+}
+
+function AppIcon({ icon, image = sparklePhoto, className = "" }: {
+  icon: string;
+  image?: string;
+  className?: string;
+}) {
+  if (!isSparkleIcon(icon)) return icon;
+
+  return (
+    <img
+      className={`photo-icon ${className}`}
+      src={`https://images.unsplash.com/${image}?auto=format&fit=crop&w=256&h=256&q=82`}
+      alt=""
+      aria-hidden="true"
+      loading="lazy"
+      decoding="async"
+    />
+  );
+}
+
 function createTemplateDesign(
   template: typeof templates[number],
   example?: { imageDataUrl: string; name: string; variant: number }
@@ -222,11 +247,34 @@ function createTemplateDesign(
     ? "left"
     : "center";
   const x = align === "left" ? 82 : 400;
+  const templateMark = isSparkleIcon(template.icon)
+    ? {
+      id: 2,
+      type: "image",
+      x: align === "left" ? x : x - 26,
+      y: 169,
+      width: 52,
+      height: 52,
+      src: `https://images.unsplash.com/${template.image}?auto=format&fit=crop&w=200&h=200&q=82`,
+      color: template.accent,
+      fontSize: 24,
+    }
+    : {
+      id: 2,
+      type: "text",
+      x,
+      y: 195,
+      text: template.icon,
+      color: template.accent,
+      fontSize: 52,
+      bold: true,
+      textAlign: align,
+    };
 
   return {
     items: [
       { id: 1, type: "text", x, y: 82, text: template.title.toUpperCase(), color: template.accent, fontSize: 15, bold: true, textAlign: align, letterSpacing: 2 },
-      { id: 2, type: "text", x, y: 195, text: template.icon, color: template.accent, fontSize: 52, bold: true, textAlign: align },
+      templateMark,
       { id: 3, type: "text", x, y: 270, text: template.headline, color: template.textColor, fontSize: 34, bold: true, textAlign: align },
       { id: 4, type: "text", x, y: 322, text: template.subtitle, color: template.accent, fontSize: 18, textAlign: align },
       { id: 5, type: "text", x, y: 420, text: "MAKE IT YOURS  →", color: template.textColor, fontSize: 14, bold: true, textAlign: align, letterSpacing: 1 },
@@ -686,7 +734,7 @@ function App() {
                   if (window.innerWidth <= 760) setSidebarExpanded(false);
                 }}
               >
-                <span className="nav-icon">{icon}</span>
+                <span className="nav-icon"><AppIcon icon={icon} /></span>
                 {name}
               </button>
             ))}
@@ -694,7 +742,7 @@ function App() {
 
           <div className="sidebar-bottom">
             <div className="upgrade-card">
-              <div className="upgrade-star">✦</div>
+              <div className="upgrade-star"><AppIcon icon="✦" image="photo-1626785774573-4b799315345d" /></div>
               <strong>Unlock your creativity</strong>
               <p>Get premium templates and AI tools.</p>
               <button onClick={() => navigate('Premium')}>Explore Premium ↗</button>
@@ -773,7 +821,9 @@ function App() {
                         type="button"
                         onClick={() => createProject(format.title, format.templateTitle)}
                       >
-                        <span className={`quick-icon ${format.type === "Social Media" ? "pink" : format.type === "Presentation" ? "blue" : "purple"}`}>{format.icon}</span>
+                        <span className={`quick-icon ${format.type === "Social Media" ? "pink" : format.type === "Presentation" ? "blue" : "purple"}`}>
+                          <AppIcon icon={format.icon} image={templates.find(template => template.title === format.templateTitle)?.image} />
+                        </span>
                         <strong>{format.title}</strong>
                         <small>{format.size}</small>
                       </button>
@@ -919,12 +969,12 @@ function App() {
                 </button>
                 {active === 'Brand Kit' && (
                   <button onClick={() => createProject('Brand Kit')}>
-                    <span>✦</span><strong>Set brand colors</strong><small>Create a reusable brand canvas</small>
+                    <span><AppIcon icon="✦" image="photo-1626785774573-4b799315345d" /></span><strong>Set brand colors</strong><small>Create a reusable brand canvas</small>
                   </button>
                 )}
                 {active === 'AI Studio' && (
                   <button onClick={() => createProject('AI Campaign', 'Your AI-powered campaign')}>
-                    <span>✧</span><strong>AI campaign starter</strong><small>Generate a campaign layout</small>
+                    <span><AppIcon icon="✧" /></span><strong>AI campaign starter</strong><small>Generate a campaign layout</small>
                   </button>
                 )}
               </div>
@@ -941,7 +991,7 @@ function App() {
               </div>
               {sortedProjects.length === 0 ? (
                 <div className="empty-projects">
-                  <span>✦</span>
+                  <span><AppIcon icon="✦" image="photo-1500530855697-b586d89ba3ee" /></span>
                   <h2>Your next great idea starts here</h2>
                   <p>Create a design and it will appear here automatically.</p>
                   <button className="hero-button project-create-button" onClick={() => createProject()}>Create your first design →</button>
@@ -1038,7 +1088,9 @@ function App() {
                   key={item.title}
                   onClick={() => { setCategory(item.category); navigate("Templates"); }}
                 >
-                  <span className={`quick-icon ${item.color}`}>{item.icon}</span>
+                  <span className={`quick-icon ${item.color}`}>
+                    <AppIcon icon={item.icon} image={templates.find(template => template.type === item.category)?.image} />
+                  </span>
                   <strong>{item.title}</strong>
                 </button>
               ))}
@@ -1057,7 +1109,7 @@ function App() {
                   return (
                     <button className="home-project-card" key={project.id} type="button" onClick={() => setOpenProjectId(project.id)}>
                       <div className="home-project-image">
-                        {preview ? <img src={preview} alt="" loading="lazy" /> : <span>✦</span>}
+                        {preview ? <img src={preview} alt="" loading="lazy" /> : <AppIcon icon="✦" image="photo-1500530855697-b586d89ba3ee" />}
                       </div>
                       <strong>{project.name}</strong>
                       <small>Edited {new Date(project.updatedAt).toLocaleDateString()}</small>
@@ -1067,7 +1119,7 @@ function App() {
               </div>
             ) : (
               <div className="home-empty-design">
-                <span>✦</span>
+                <span><AppIcon icon="✦" image="photo-1500530855697-b586d89ba3ee" /></span>
                 <div><strong>Your recent designs will show up here</strong><small>Pick a photo template below or start with a blank design.</small></div>
                 <button type="button" onClick={() => createProject()}>＋ Create a design</button>
               </div>
@@ -1113,7 +1165,7 @@ function App() {
             <div className="home-format-strip">
               {[searchFormats[0], searchFormats[8], searchFormats[12], searchFormats[1], searchFormats[10], searchFormats[14]].map(format => (
                 <button className="home-format-card" key={format.title} type="button" onClick={() => createProject(format.title, format.templateTitle)}>
-                  <span>{format.icon}</span><strong>{format.title}</strong><small>{format.size}</small>
+                  <span><AppIcon icon={format.icon} image={templates.find(template => template.title === format.templateTitle)?.image} /></span><strong>{format.title}</strong><small>{format.size}</small>
                 </button>
               ))}
             </div>
@@ -1129,12 +1181,12 @@ function App() {
 
           <section className="ai-banner">
             <div>
-              <span className="ai-label">✦ POWERED BY AI</span>
+              <span className="ai-label"><AppIcon icon="✦" /> POWERED BY AI</span>
               <h2>Your imagination.<br />AI-powered creation.</h2>
               <p>Discover new possibilities with SmartShare AI Studio.</p>
               <button onClick={() => setActive("AI Studio")}>Explore AI Studio →</button>
             </div>
-            <div className="ai-art">✧</div>
+            <div className="ai-art"><AppIcon icon="✧" /></div>
           </section>
 
           <footer className="footer">© 2026 SmartShare. Create without limits.</footer>
