@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, type MouseEvent as ReactMouseEvent } from 'react';
 import './App.css';
 import { readProjects, saveProject, type ProjectRecord } from './projects';
-import { saveCloudProject, trackProductEvent, uploadDesignAsset } from './supabase';
+import { hasPremiumSubscription, saveCloudProject, trackProductEvent, uploadDesignAsset } from './supabase';
 
 type ShapeKind = 'rectangle' | 'circle' | 'triangle' | 'line' | 'arrow';
 type GradientDirection = 'horizontal' | 'vertical' | 'diagonal';
@@ -66,7 +66,14 @@ textGlowBlur?: number;
   borderStyle?: 'solid' | 'dashed' | 'dotted';
 };
 
-type EditorProps = { projectId: string; userId?: string; onBack?: () => void };
+type EditorProps = {
+  projectId: string;
+  userId?: string;
+  onBack?: () => void;
+  onUpgrade?: () => void;
+};
+
+type ExportQuality = 'normal' | 'medium' | 'hd';
 
 type SavedProject = {
   items: DesignItem[];
@@ -162,7 +169,7 @@ function getGradientCoordinates(direction: GradientDirection) {
   return { x1: '0%', y1: '0%', x2: '100%', y2: '0%' };
 }
 
-export default function Editor({ projectId, userId, onBack }: EditorProps) {
+export default function Editor({ projectId, userId, onBack, onUpgrade }: EditorProps) {
   const [savedProject] = useState<ProjectRecord<SavedProject> | undefined>(
     () => readProjects<SavedProject>(userId).find(item => item.id === projectId)
   );
@@ -185,6 +192,9 @@ export default function Editor({ projectId, userId, onBack }: EditorProps) {
   const [saveStatus, setSaveStatus] = useState('Saved');
   const [downloadMenuOpen, setDownloadMenuOpen] = useState(false);
   const [exportError, setExportError] = useState<string | null>(null);
+  const [premiumStatus, setPremiumStatus] = useState<'checking' | 'free' | 'premium' | 'error'>(
+    userId ? 'checking' : 'free'
+  );
 
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('All');
@@ -195,6 +205,31 @@ export default function Editor({ projectId, userId, onBack }: EditorProps) {
   const [historyIndex, setHistoryIndex] = useState(0);
 
   const [colorHue, setColorHue] = useState(260);
+
+  useEffect(() => {
+    if (!userId) {
+      setPremiumStatus('free');
+      return;
+    }
+
+    let active = true;
+    setPremiumStatus('checking');
+    void hasPremiumSubscription(userId)
+      .then(isPremium => {
+        if (active) setPremiumStatus(isPremium ? 'premium' : 'free');
+      })
+      .catch(error => {
+        console.error('Could not verify the Premium subscription.', error);
+        if (active) {
+          setPremiumStatus('error');
+          setExportError('Could not verify Premium status. Try again before exporting HD.');
+        }
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [userId]);
 
   const historyRef = useRef<DesignItem[][]>([savedProject?.design.items ?? []]);
   const historyIndexRef = useRef(0);
@@ -821,6 +856,13 @@ export default function Editor({ projectId, userId, onBack }: EditorProps) {
   };
 
   const downloadSvg = () => {
+    if (premiumStatus !== 'premium') {
+      setExportError(premiumStatus === 'checking'
+        ? 'Checking your Premium status. Try again in a moment.'
+        : 'SVG is a Premium export. Upgrade to Premium to download it.');
+      return;
+    }
+
     const svg = document.getElementById('ss-canvas');
     if (!(svg instanceof SVGSVGElement)) {
       setExportError('Could not find the design canvas to export.');
@@ -839,7 +881,14 @@ export default function Editor({ projectId, userId, onBack }: EditorProps) {
     }
   };
 
-  const downloadRaster = async (format: 'png' | 'jpg') => {
+  const downloadRaster = async (format: 'png' | 'jpg', quality: ExportQuality) => {
+    if (quality === 'hd' && premiumStatus !== 'premium') {
+      setExportError(premiumStatus === 'checking'
+        ? 'Checking your Premium status. Try again in a moment.'
+        : 'HD downloads are Premium-only. Upgrade to Premium to unlock HD quality.');
+      return;
+    }
+
     const svg = document.getElementById('ss-canvas');
     if (!(svg instanceof SVGSVGElement)) {
       setExportError('Could not find the design canvas to export.');
@@ -847,10 +896,13 @@ export default function Editor({ projectId, userId, onBack }: EditorProps) {
     }
 
     setExportError(null);
+    const scale = quality === 'normal' ? 1 : quality === 'medium' ? 2 : 4;
+    const width = 800 * scale;
+    const height = 500 * scale;
     const exportSvg = svg.cloneNode(true) as SVGSVGElement;
     exportSvg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-    exportSvg.setAttribute('width', '1600');
-    exportSvg.setAttribute('height', '1000');
+    exportSvg.setAttribute('width', String(width));
+    exportSvg.setAttribute('height', String(height));
     const svgBlob = new Blob(
       [new XMLSerializer().serializeToString(exportSvg)],
       { type: 'image/svg+xml;charset=utf-8' }
@@ -866,8 +918,8 @@ export default function Editor({ projectId, userId, onBack }: EditorProps) {
       });
 
       const canvas = document.createElement('canvas');
-      canvas.width = 1600;
-      canvas.height = 1000;
+      canvas.width = width;
+      canvas.height = height;
       const context = canvas.getContext('2d');
       if (!context) throw new Error('Canvas rendering is unavailable.');
 
@@ -895,6 +947,40 @@ export default function Editor({ projectId, userId, onBack }: EditorProps) {
       setExportError(`${format.toUpperCase()} export failed. Please try again.`);
     } finally {
       URL.revokeObjectURL(svgUrl);
+    }
+  };
+
+  const openPremiumPlans = () => {
+    try {
+      const design: SavedProject = {
+        items,
+        background,
+        backgroundFillType,
+        backgroundColor2,
+        backgroundColor3,
+        backgroundUseThirdColor,
+        backgroundDirection
+      };
+      saveProject({
+        id: projectId,
+        name: projectName.trim() || 'Untitled design',
+        createdAt: savedProject?.createdAt ?? new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        design
+      }, userId);
+      if (userId) {
+        void saveCloudProject(userId, {
+          id: projectId,
+          name: projectName.trim() || 'Untitled design',
+          createdAt: savedProject?.createdAt ?? new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          design
+        }).catch(error => console.error('Could not save project before opening Premium plans.', error));
+      }
+      onUpgrade?.();
+    } catch (error) {
+      console.error('Could not save project before opening Premium plans.', error);
+      setExportError('Could not save your design. Please try again before upgrading.');
     }
   };
 
@@ -948,10 +1034,19 @@ export default function Editor({ projectId, userId, onBack }: EditorProps) {
             </button>
             {downloadMenuOpen && (
               <div className="ss-export-menu" role="menu" aria-label="Export design">
-                <button type="button" role="menuitem" onClick={downloadSvg}>SVG</button>
-                <button type="button" role="menuitem" onClick={() => void downloadRaster('png')}>PNG · 2×</button>
-                <button type="button" role="menuitem" onClick={() => void downloadRaster('jpg')}>JPG · 2×</button>
+                <div className="ss-export-quality-label">PNG</div>
+                <button type="button" role="menuitem" onClick={() => void downloadRaster('png', 'normal')}>Normal · 800 × 500 · Free</button>
+                <button type="button" role="menuitem" onClick={() => void downloadRaster('png', 'medium')}>Medium · 1600 × 1000 · Free</button>
+                <button type="button" role="menuitem" onClick={() => void downloadRaster('png', 'hd')}>HD · 3200 × 2000 · Premium</button>
+                <div className="ss-export-quality-label">JPG</div>
+                <button type="button" role="menuitem" onClick={() => void downloadRaster('jpg', 'normal')}>Normal · 800 × 500 · Free</button>
+                <button type="button" role="menuitem" onClick={() => void downloadRaster('jpg', 'medium')}>Medium · 1600 × 1000 · Free</button>
+                <button type="button" role="menuitem" onClick={() => void downloadRaster('jpg', 'hd')}>HD · 3200 × 2000 · Premium</button>
+                <button type="button" role="menuitem" onClick={downloadSvg}>SVG · Vector · Premium</button>
                 {exportError && <p role="alert">{exportError}</p>}
+                {premiumStatus !== 'premium' && (
+                  <button type="button" role="menuitem" onClick={openPremiumPlans}>Explore Premium ↗</button>
+                )}
               </div>
             )}
           </div>

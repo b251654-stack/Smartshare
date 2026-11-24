@@ -31,6 +31,17 @@ type ProductEventRow = {
   created_at: string;
 };
 
+type SubscriptionRow = {
+  user_id: string;
+  provider: string;
+  provider_customer_id: string | null;
+  provider_subscription_id: string | null;
+  plan: 'free' | 'pro' | 'team';
+  status: 'inactive' | 'active' | 'trialing' | 'past_due' | 'cancelled';
+  current_period_end: string | null;
+  updated_at: string;
+};
+
 type Database = {
   public: {
     Tables: {
@@ -52,6 +63,12 @@ type Database = {
         Insert: Pick<ProductEventRow, 'user_id' | 'event' | 'metadata'> &
           Partial<Pick<ProductEventRow, 'id' | 'created_at'>>;
         Update: Partial<ProductEventRow>;
+        Relationships: [];
+      };
+      subscriptions: {
+        Row: SubscriptionRow;
+        Insert: SubscriptionRow;
+        Update: Partial<SubscriptionRow>;
         Relationships: [];
       };
     };
@@ -77,6 +94,21 @@ export const supabase = supabaseUrl && supabasePublishableKey
   : null;
 
 export type AuthUser = User;
+
+export async function hasPremiumSubscription(userId: string): Promise<boolean> {
+  if (!supabase) return false;
+
+  const { data, error } = await supabase
+    .from('subscriptions')
+    .select('plan, status, current_period_end')
+    .eq('user_id', userId)
+    .maybeSingle();
+
+  if (error) throw error;
+  if (!data || !['pro', 'team'].includes(data.plan)) return false;
+  if (!['active', 'trialing'].includes(data.status)) return false;
+  return !data.current_period_end || Date.parse(data.current_period_end) > Date.now();
+}
 
 export async function listCloudProjects(userId: string): Promise<ProjectRecord<unknown>[]> {
   if (!supabase) throw new Error('Supabase is not configured.');

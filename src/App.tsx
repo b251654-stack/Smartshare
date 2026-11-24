@@ -327,7 +327,17 @@ function App() {
   }
 
   if (openProjectId) {
-    return <Editor projectId={openProjectId} userId={user?.id} onBack={closeEditor} />;
+    return (
+      <Editor
+        projectId={openProjectId}
+        userId={user?.id}
+        onBack={closeEditor}
+        onUpgrade={() => {
+          closeEditor();
+          navigate('Premium');
+        }}
+      />
+    );
   }
 
   if (sharedProject) {

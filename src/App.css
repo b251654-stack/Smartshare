@@ -632,7 +632,9 @@ button { cursor: pointer; }
   right: 0;
   z-index: 30;
   display: grid;
-  width: 170px;
+  width: 280px;
+  max-height: min(70vh, 520px);
+  overflow-y: auto;
   gap: 4px;
   padding: 8px;
   border: 1px solid #e8e5ef;
@@ -646,11 +648,12 @@ button { cursor: pointer; }
   border: 0;
   background: transparent;
   text-align: left;
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .ss-top-actions .ss-export-menu button:hover { background: #f3efff; color: #6541d9; }
 .ss-export-menu p { margin: 4px 2px; color: #b42318; font-size: 11px; line-height: 1.4; }
+.ss-export-quality-label { padding: 6px 9px 2px; color: #89869c; font-size: 10px; font-weight: 800; letter-spacing: .08em; }
 
 .ss-editor-body { display: flex; flex: 1; min-height: 0; overflow: hidden; }
 
