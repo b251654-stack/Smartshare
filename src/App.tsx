@@ -384,6 +384,19 @@ function App() {
   }, []);
 
   useEffect(() => {
+    let reloadedForResume = false;
+
+    const restoreFromAppSwitch = (event: PageTransitionEvent) => {
+      if (!event.persisted || reloadedForResume) return;
+      reloadedForResume = true;
+      window.location.reload();
+    };
+
+    window.addEventListener('pageshow', restoreFromAppSwitch);
+    return () => window.removeEventListener('pageshow', restoreFromAppSwitch);
+  }, []);
+
+  useEffect(() => {
     if (!supabase) return;
     const authClient = supabase;
 
