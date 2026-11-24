@@ -1488,11 +1488,49 @@ export default function Editor({ projectId, userId, onBack, onUpgrade }: EditorP
                   />
 
                   <label>Text Color</label>
-                  <input
-                    type="color"
-                    value={current.color}
-                    onChange={e => updateItem({ color: e.target.value })}
-                  />
+                  <div className="ss-color-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(8, 28px)', gap: 8, margin: '8px 0 12px' }}>
+                    {['#111111', '#FFFFFF', '#EF4444', '#F97316', '#FACC15', '#22C55E', '#3B82F6', '#8B5CF6', '#EC4899', '#14B8A6', '#64748B', '#78350F'].map(color => (
+                      <button
+                        key={color}
+                        type="button"
+                        title={color}
+                        aria-label={`Set text color to ${color}`}
+                        onClick={() => applyColor(color)}
+                        style={{
+                          width: 28,
+                          height: 28,
+                          borderRadius: '50%',
+                          border: current.color.toLowerCase() === color.toLowerCase()
+                            ? '3px solid #7546dc'
+                            : '1px solid #d1d5db',
+                          background: color,
+                          boxShadow: color === '#FFFFFF' ? 'inset 0 0 0 1px #ddd' : 'none',
+                          cursor: 'pointer'
+                        }}
+                      />
+                    ))}
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+                    <input
+                      type="color"
+                      value={current.color}
+                      onChange={e => applyColor(e.target.value)}
+                      aria-label="Choose custom text color"
+                      style={{ width: 55, height: 42, padding: 2, cursor: 'pointer' }}
+                    />
+                    <input
+                      type="text"
+                      value={current.color}
+                      onChange={e => {
+                        if (/^#[0-9A-Fa-f]{6}$/.test(e.target.value)) {
+                          applyColor(e.target.value);
+                        }
+                      }}
+                      maxLength={7}
+                      aria-label="Text color hex code"
+                      style={{ flex: 1, minWidth: 0, height: 40, padding: '0 10px', border: '1px solid #d1d5db', borderRadius: 7 }}
+                    />
+                  </div>
 
                   <label>Font Family</label>
                   <select

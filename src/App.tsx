@@ -313,10 +313,13 @@ function getActivePageFromHash(): string {
 }
 
 function App() {
+  const editorHistoryKey = 'smartshareEditorProjectId';
   const [projects, setProjects] = useState<ProjectRecord<unknown>[]>(() => readProjects());
   const [openProjectId, setOpenProjectId] = useState<string | null>(() => {
     const projectId = window.history.state?.smartshareEditorProjectId;
-    return typeof projectId === 'string' ? projectId : null;
+    if (typeof projectId === 'string') return projectId;
+    const savedProjectId = window.sessionStorage.getItem(editorHistoryKey);
+    return savedProjectId || null;
   });
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<typeof templates[number] | null>(null);
@@ -332,7 +335,6 @@ function App() {
   const [shareBusyId, setShareBusyId] = useState<string | null>(null);
   const [sharedProject, setSharedProject] = useState<{ id: string; name: string; design: unknown } | null>(null);
   const userId = user?.id;
-  const editorHistoryKey = 'smartshareEditorProjectId';
 
   useEffect(() => {
     const parts = window.location.pathname.split('/').filter(Boolean);
@@ -366,7 +368,13 @@ function App() {
   useEffect(() => {
     const syncEditorFromHistory = () => {
       const projectId = window.history.state?.[editorHistoryKey];
-      setOpenProjectId(typeof projectId === 'string' ? projectId : null);
+      if (typeof projectId === 'string') {
+        window.sessionStorage.setItem(editorHistoryKey, projectId);
+        setOpenProjectId(projectId);
+      } else {
+        window.sessionStorage.removeItem(editorHistoryKey);
+        setOpenProjectId(null);
+      }
     };
 
     window.addEventListener('popstate', syncEditorFromHistory);
@@ -390,6 +398,7 @@ function App() {
       ...(currentState && typeof currentState === 'object' ? currentState : {}),
       [editorHistoryKey]: projectId
     }, '', window.location.href);
+    window.sessionStorage.setItem(editorHistoryKey, projectId);
     setOpenProjectId(projectId);
   };
 
@@ -580,6 +589,7 @@ function App() {
     if (!fromBrowserBack && window.history.state?.[editorHistoryKey] === openProjectId) {
       window.history.back();
     }
+    window.sessionStorage.removeItem(editorHistoryKey);
     setOpenProjectId(null);
     setProjects(readProjects(user?.id));
   };
