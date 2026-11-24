@@ -12,15 +12,28 @@ const categories = [
   "Video",
   "Logo",
   "Marketing",
+  "Business",
+  "Event",
+  "Education",
 ];
 
 const templates = [
-  { title: "Instagram Post", type: "Social Media", size: "1080 × 1080", style: "pink", icon: "◎" },
-  { title: "YouTube Thumbnail", type: "Video", size: "1280 × 720", style: "orange", icon: "▶" },
-  { title: "Business Presentation", type: "Presentation", size: "16:9", style: "blue", icon: "▤" },
-  { title: "Brand Logo", type: "Logo", size: "500 × 500", style: "dark", icon: "✦" },
-  { title: "Marketing Poster", type: "Marketing", size: "A4 Portrait", style: "purple", icon: "✳" },
-  { title: "Instagram Story", type: "Social Media", size: "1080 × 1920", style: "green", icon: "▯" },
+  { title: "Instagram Post", type: "Social Media", size: "1080 × 1080", style: "pink", icon: "◎", headline: "Make today memorable", subtitle: "A little inspiration for your feed", background: "#fff1f6", accent: "#d64f89", textColor: "#70234b" },
+  { title: "Instagram Story", type: "Social Media", size: "1080 × 1920", style: "green", icon: "▯", headline: "Your next chapter", subtitle: "Share something worth remembering", background: "#eaf8f1", accent: "#319c70", textColor: "#164e40" },
+  { title: "YouTube Thumbnail", type: "Video", size: "1280 × 720", style: "orange", icon: "▶", headline: "You need to see this!", subtitle: "The complete guide starts here", background: "#fff0df", accent: "#e56e40", textColor: "#71331d" },
+  { title: "YouTube Channel Banner", type: "Video", size: "2560 × 1440", style: "dark", icon: "▶", headline: "Create. Learn. Repeat.", subtitle: "New videos every week", background: "#242236", accent: "#f9e7a6", textColor: "#ffffff" },
+  { title: "Business Presentation", type: "Presentation", size: "16:9", style: "blue", icon: "▤", headline: "Ideas into impact", subtitle: "A clear plan for what comes next", background: "#edf3ff", accent: "#527ee3", textColor: "#24385f" },
+  { title: "Pitch Deck Cover", type: "Presentation", size: "16:9", style: "purple", icon: "↗", headline: "The future starts here", subtitle: "Company name · Investor presentation", background: "#f4efff", accent: "#8054dc", textColor: "#39275f" },
+  { title: "Brand Logo", type: "Logo", size: "500 × 500", style: "dark", icon: "✦", headline: "YOUR BRAND", subtitle: "Make it unforgettable", background: "#26243a", accent: "#f9e7a6", textColor: "#ffffff" },
+  { title: "Startup Logo", type: "Logo", size: "500 × 500", style: "blue", icon: "✧", headline: "NOVA", subtitle: "Ideas that move us forward", background: "#eaf1ff", accent: "#527ee3", textColor: "#24385f" },
+  { title: "Marketing Poster", type: "Marketing", size: "A4 Portrait", style: "purple", icon: "✳", headline: "A brighter kind of bold", subtitle: "Discover the collection made for you", background: "#f4efff", accent: "#8054dc", textColor: "#39275f" },
+  { title: "Product Launch Ad", type: "Marketing", size: "1080 × 1350", style: "orange", icon: "✦", headline: "Meet your new favorite", subtitle: "Available now · Explore the launch", background: "#fff4e8", accent: "#d97736", textColor: "#653a20" },
+  { title: "Business Flyer", type: "Business", size: "A4 Portrait", style: "blue", icon: "▣", headline: "Good work starts here", subtitle: "Professional service, personal care", background: "#edf3ff", accent: "#527ee3", textColor: "#24385f" },
+  { title: "Business Card", type: "Business", size: "3.5 × 2 in", style: "dark", icon: "▤", headline: "ALEX MORGAN", subtitle: "Creative Director · hello@example.com", background: "#242236", accent: "#f0bf72", textColor: "#ffffff" },
+  { title: "Wedding Invitation", type: "Event", size: "5 × 7 in", style: "pink", icon: "♡", headline: "Together with our families", subtitle: "Join us to celebrate love · June 20", background: "#fff7f2", accent: "#b76e79", textColor: "#684852" },
+  { title: "Birthday Invitation", type: "Event", size: "1080 × 1350", style: "yellow", icon: "✳", headline: "Let's celebrate!", subtitle: "You're invited · Saturday at 6 PM", background: "#fff8df", accent: "#c29331", textColor: "#624d1f" },
+  { title: "Education Poster", type: "Education", size: "A4 Portrait", style: "green", icon: "✎", headline: "Curiosity changes everything", subtitle: "Learn something new every day", background: "#eaf8f1", accent: "#319c70", textColor: "#164e40" },
+  { title: "Event Announcement", type: "Event", size: "1080 × 1350", style: "orange", icon: "✦", headline: "Save the date", subtitle: "An evening of ideas, music and people", background: "#fff0df", accent: "#dd8b3f", textColor: "#71331d" },
 ];
 
 const menu = [
@@ -34,6 +47,29 @@ const menu = [
   ["👥", "Team"],
   ["◉", "Admin"],
 ];
+
+function createTemplateDesign(template: typeof templates[number]) {
+  const align = ["Business", "Presentation", "Video", "Marketing"].includes(template.type)
+    ? "left"
+    : "center";
+  const x = align === "left" ? 82 : 400;
+
+  return {
+    items: [
+      { id: 1, type: "text", x, y: 82, text: template.title.toUpperCase(), color: template.accent, fontSize: 15, bold: true, textAlign: align, letterSpacing: 2 },
+      { id: 2, type: "text", x, y: 195, text: template.icon, color: template.accent, fontSize: 52, bold: true, textAlign: align },
+      { id: 3, type: "text", x, y: 270, text: template.headline, color: template.textColor, fontSize: 34, bold: true, textAlign: align },
+      { id: 4, type: "text", x, y: 322, text: template.subtitle, color: template.accent, fontSize: 18, textAlign: align },
+      { id: 5, type: "text", x, y: 420, text: "MAKE IT YOURS  →", color: template.textColor, fontSize: 14, bold: true, textAlign: align, letterSpacing: 1 },
+    ],
+    background: template.background,
+    backgroundFillType: "solid",
+    backgroundColor2: template.accent,
+    backgroundColor3: template.textColor,
+    backgroundUseThirdColor: false,
+    backgroundDirection: "horizontal",
+  };
+}
 
 function App() {
   const [projects, setProjects] = useState<ProjectRecord<unknown>[]>(() => readProjects());
@@ -185,12 +221,13 @@ function App() {
 
   const createProject = (name = 'Untitled design', starterTitle?: string) => {
     const now = new Date().toISOString();
+    const selectedTemplate = templates.find(template => template.title === starterTitle);
     const project: ProjectRecord<unknown> = {
       id: createProjectId(),
       name,
       createdAt: now,
       updatedAt: now,
-      design: {
+      design: selectedTemplate ? createTemplateDesign(selectedTemplate) : {
         items: starterTitle ? [
           {
             id: 1,
@@ -476,7 +513,7 @@ function App() {
             </section>
           ) : active === 'Templates' ? (
             <section className="template-library-section">
-              <div className="section-heading"><div><div className="eyebrow">TEMPLATE LIBRARY</div><h1>Start with a template</h1><p>Choose a ready-made canvas for your next design.</p></div></div>
+              <div className="section-heading"><div><div className="eyebrow">TEMPLATE LIBRARY</div><h1>Pick a design you love</h1><p>Choose any template below, then edit its text, colors, and layers in the editor.</p></div></div>
               <div className="category-tabs">
                 {categories.map(item => (
                   <button key={item} className={category === item ? 'category active-category' : 'category'} onClick={() => setCategory(item)}>{item}</button>
@@ -488,9 +525,10 @@ function App() {
                     <div className={`template-preview ${item.style}`}>
                       <div className="preview-top">SMARTSHARE <span>✦</span></div>
                       <div className="preview-symbol">{item.icon}</div>
-                      <div className="preview-title">{item.title}</div>
+                      <div className="preview-title">{item.headline}</div>
+                      <div className="preview-subtitle">{item.subtitle}</div>
                     </div>
-                    <div className="template-info"><div><strong>{item.title}</strong><small>{item.size}</small></div><span>↗</span></div>
+                    <div className="template-info"><div><strong>{item.title}</strong><small>{item.type} · {item.size}</small></div><span>Customize ↗</span></div>
                   </button>
                 ))}
               </div>
@@ -699,12 +737,12 @@ function App() {
                   <div className={`template-preview ${item.style}`}>
                     <div className="preview-top">SMARTSHARE <span>✦</span></div>
                     <div className="preview-symbol">{item.icon}</div>
-                    <div className="preview-title">{item.title}</div>
-                    <div className="preview-lines"><i /><i /><i /></div>
+                    <div className="preview-title">{item.headline}</div>
+                    <div className="preview-subtitle">{item.subtitle}</div>
                   </div>
                   <div className="template-info">
-                    <div><strong>{item.title}</strong><small>{item.size}</small></div>
-                    <span>↗</span>
+                    <div><strong>{item.title}</strong><small>{item.type} · {item.size}</small></div>
+                    <span>Customize ↗</span>
                   </div>
                 </button>
               ))}
