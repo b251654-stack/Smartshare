@@ -1488,8 +1488,8 @@ export default function Editor({ projectId, userId, onBack, onUpgrade }: EditorP
                   />
 
                   <label>Text Color</label>
-                  <div className="ss-color-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(8, 28px)', gap: 8, margin: '8px 0 12px' }}>
-                    {['#111111', '#FFFFFF', '#EF4444', '#F97316', '#FACC15', '#22C55E', '#3B82F6', '#8B5CF6', '#EC4899', '#14B8A6', '#64748B', '#78350F'].map(color => (
+                  <div className="ss-color-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 28px)', gap: 8, margin: '8px 0 12px' }}>
+                    {quickColors.map(color => (
                       <button
                         key={color}
                         type="button"
