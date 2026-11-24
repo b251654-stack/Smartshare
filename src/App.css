@@ -36,7 +36,19 @@ button { cursor: pointer; }
   position: sticky;
   top: 0;
   height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
 }
+
+.sidebar::-webkit-scrollbar { width: 6px; }
+.sidebar::-webkit-scrollbar-thumb { background: #ded9ed; border-radius: 999px; }
+
+.brand,
+.create-button,
+.menu-label,
+.nav-menu,
+.sidebar-bottom { flex-shrink: 0; }
 
 .brand {
   display: flex;
@@ -1001,4 +1013,39 @@ button { cursor: pointer; }
   }
 
   .ss-floating-toolbar button { padding: 5px 8px; }
+}
+
+
+/* Fix: Left Sidebar Vertical Scrolling */
+
+.sidebar {
+  height: 100vh;
+  max-height: 100dvh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  flex-shrink: 0;
+  overscroll-behavior-y: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #b8b8b8 transparent;
+}
+
+/* Keep sidebar content accessible */
+.sidebar > * {
+  flex-shrink: 0;
+}
+
+/* Main workspace scrolling */
+.main-content,
+.main-workspace {
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Mobile support */
+@media (max-width: 768px) {
+  .sidebar {
+    max-height: 100dvh;
+    overflow-y: auto;
+  }
 }
