@@ -330,8 +330,6 @@ function App() {
   const [authDialogOpen, setAuthDialogOpen] = useState(false);
   const [cloudStatus, setCloudStatus] = useState(supabase ? 'Checking account…' : 'Local save only');
   const [cloudError, setCloudError] = useState('');
-  const [authReady, setAuthReady] = useState(!supabase);
-  const [cloudSyncReady, setCloudSyncReady] = useState(!supabase);
   const [shareBusyId, setShareBusyId] = useState<string | null>(null);
   const [sharedProject, setSharedProject] = useState<{ id: string; name: string; design: unknown } | null>(null);
   const userId = user?.id;
@@ -385,6 +383,34 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    if (!supabase) return;
+    const authClient = supabase;
+
+    const recheckSession = () => {
+      if (document.visibilityState !== 'visible') return;
+      void authClient.auth.getSession()
+        .then(({ data, error }) => {
+          if (error) throw error;
+          const sessionUser = data.session?.user ?? null;
+          setUser(sessionUser);
+          setProjects(readProjects(sessionUser?.id));
+          setCloudStatus(sessionUser ? 'Syncing projects…' : 'Signed out');
+        })
+        .catch(error => {
+          console.error('Could not recheck the signed-in session.', error);
+          setCloudStatus('Local workspace ready');
+        });
+    };
+
+    window.addEventListener('pageshow', recheckSession);
+    document.addEventListener('visibilitychange', recheckSession);
+    return () => {
+      window.removeEventListener('pageshow', recheckSession);
+      document.removeEventListener('visibilitychange', recheckSession);
+    };
+  }, []);
+
   const navigate = (name: string) => {
     if (name !== 'Templates') setSelectedTemplate(null);
     setSearch('');
@@ -406,38 +432,41 @@ function App() {
     if (!supabase) return;
 
     let active = true;
+    const authTimeout = window.setTimeout(() => {
+      if (!active) return;
+      setCloudStatus(current => current === 'Checking account…' ? 'Local workspace ready' : current);
+    }, 8000);
+
     void supabase.auth.getSession()
       .then(({ data, error }) => {
         if (error) throw error;
         if (!active) return;
+        window.clearTimeout(authTimeout);
         const sessionUser = data.session?.user ?? null;
         setUser(sessionUser);
         setProjects(readProjects(sessionUser?.id));
         setCloudStatus(sessionUser ? 'Syncing projects…' : 'Signed out');
-        setAuthReady(true);
-        setCloudSyncReady(!sessionUser);
       })
       .catch(error => {
         console.error('Could not restore the signed-in session.', error);
         if (active) {
+          window.clearTimeout(authTimeout);
           setCloudStatus('Account unavailable');
-          setAuthReady(true);
-          setCloudSyncReady(true);
         }
       });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       const sessionUser = session?.user ?? null;
+      window.clearTimeout(authTimeout);
       setUser(sessionUser);
       setProjects(readProjects(sessionUser?.id));
       setCloudStatus(sessionUser ? 'Syncing projects…' : 'Signed out');
-      setCloudSyncReady(!sessionUser);
-      setAuthReady(true);
       setCloudError('');
     });
 
     return () => {
       active = false;
+      window.clearTimeout(authTimeout);
       subscription.unsubscribe();
     };
   }, []);
@@ -446,8 +475,16 @@ function App() {
     if (!userId || !supabase) return;
 
     let active = true;
+    const cloudTimeout = window.setTimeout(() => {
+      if (active) {
+        setProjects(readProjects(userId));
+        setCloudStatus('Cloud sync timed out');
+      }
+    }, 12000);
+
     void listCloudProjects(userId)
       .then(async cloudProjects => {
+        window.clearTimeout(cloudTimeout);
         const localProjects = readProjects<unknown>(userId);
         const cloudById = new Map(cloudProjects.map(project => [project.id, project]));
 
@@ -469,21 +506,21 @@ function App() {
         if (active) {
           setProjects(readProjects(userId));
           setCloudStatus('Cloud synced');
-          setCloudSyncReady(true);
         }
       })
       .catch(error => {
         console.error('Could not sync projects from cloud.', error);
         if (active) {
+          window.clearTimeout(cloudTimeout);
           setProjects(readProjects(userId));
           setCloudError('Cloud sync failed. Your browser copy is still available.');
           setCloudStatus('Sync failed');
-          setCloudSyncReady(true);
         }
       });
 
     return () => {
       active = false;
+      window.clearTimeout(cloudTimeout);
     };
   }, [userId]);
 
@@ -708,10 +745,6 @@ function App() {
       <small>{item.size}</small>
     </button>
   );
-
-  if (supabase && (!authReady || (user && !cloudSyncReady))) {
-    return <div className="auth-loading" role="status">Connecting your SmartShare workspace…</div>;
-  }
 
   if (openProjectId) {
     return (
