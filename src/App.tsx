@@ -329,6 +329,7 @@ function App() {
   const [shareBusyId, setShareBusyId] = useState<string | null>(null);
   const [sharedProject, setSharedProject] = useState<{ id: string; name: string; design: unknown } | null>(null);
   const userId = user?.id;
+  const editorHistoryKey = 'smartshareEditorProjectId';
 
   useEffect(() => {
     const parts = window.location.pathname.split('/').filter(Boolean);
@@ -364,6 +365,15 @@ function App() {
     setSearch('');
     setActive(name);
     window.location.hash = `/${name}`;
+  };
+
+  const openProject = (projectId: string) => {
+    const currentState = window.history.state;
+    window.history.pushState({
+      ...(currentState && typeof currentState === 'object' ? currentState : {}),
+      [editorHistoryKey]: projectId
+    }, '', window.location.href);
+    setOpenProjectId(projectId);
   };
 
   useEffect(() => {
@@ -506,7 +516,7 @@ function App() {
     try {
       saveProject(project, user?.id);
       setProjects(readProjects(user?.id));
-      setOpenProjectId(project.id);
+      openProject(project.id);
     } catch (error) {
       console.error('Could not create project.', error);
       window.alert('Could not create this project. Please check available browser storage.');
@@ -549,7 +559,10 @@ function App() {
     }
   };
 
-  const closeEditor = () => {
+  const closeEditor = (fromBrowserBack = false) => {
+    if (!fromBrowserBack && window.history.state?.[editorHistoryKey] === openProjectId) {
+      window.history.back();
+    }
     setOpenProjectId(null);
     setProjects(readProjects(user?.id));
   };
@@ -1002,7 +1015,7 @@ function App() {
                     <article className="project-card project-record-card" key={project.id}>
                       <button
                         className="project-card-open"
-                        onClick={() => setOpenProjectId(project.id)}
+                        onClick={() => openProject(project.id)}
                         aria-label={`Open ${project.name}`}
                       >
                         <span className="project-card-preview">S</span>
@@ -1107,7 +1120,7 @@ function App() {
                 {sortedProjects.slice(0, 8).map(project => {
                   const preview = getProjectPreview(project.design);
                   return (
-                    <button className="home-project-card" key={project.id} type="button" onClick={() => setOpenProjectId(project.id)}>
+                    <button className="home-project-card" key={project.id} type="button" onClick={() => openProject(project.id)}>
                       <div className="home-project-image">
                         {preview ? <img src={preview} alt="" loading="lazy" /> : <AppIcon icon="✦" image="photo-1500530855697-b586d89ba3ee" />}
                       </div>

@@ -69,7 +69,7 @@ textGlowBlur?: number;
 type EditorProps = {
   projectId: string;
   userId?: string;
-  onBack?: () => void;
+  onBack?: (fromBrowserBack?: boolean) => void;
   onUpgrade?: () => void;
 };
 
@@ -340,7 +340,7 @@ export default function Editor({ projectId, userId, onBack, onUpgrade }: EditorP
     const saveBeforeLeaving = () => saveCurrentProjectRef.current();
     const closeAfterSaving = () => {
       saveCurrentProjectRef.current();
-      onBackRef.current?.();
+      onBackRef.current?.(true);
     };
     window.addEventListener('popstate', closeAfterSaving);
     window.addEventListener('pagehide', saveBeforeLeaving);
